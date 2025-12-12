@@ -525,17 +525,27 @@ body {
     padding: var(--space-lg);
     background: var(--cream-dark);
     border-left: 3px solid var(--ink);
-    display: none;
-    animation: slideUp var(--transition-medium);
+    visibility: hidden;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity var(--transition-medium), 
+                max-height var(--transition-medium), 
+                visibility var(--transition-medium),
+                padding var(--transition-medium),
+                margin var(--transition-medium);
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
 }
 
 .feedback.visible {
-    display: block;
-}
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    visibility: visible;
+    opacity: 1;
+    max-height: 200px;
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-lg);
+    margin-top: var(--space-lg);
 }
 
 .feedback.correct {

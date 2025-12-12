@@ -479,6 +479,17 @@ class PeggysQuiz {
             feedbackText.textContent = responses[Math.floor(Math.random() * responses.length)];
             correctAnswerEl.textContent = `The answer was: ${correctAnswer}`;
         }
+        
+        // On mobile, smoothly scroll feedback into view after it appears
+        if (this.isMobile()) {
+            setTimeout(() => {
+                feedback.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest',
+                    inline: 'nearest'
+                });
+            }, 350); // Wait for transition to start
+        }
     }
 
     nextQuestion() {
