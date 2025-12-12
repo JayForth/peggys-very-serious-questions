@@ -851,18 +851,16 @@ main.screen.active {
     font-style: italic;
 }
 
-.review-wikipedia-link {
-    display: inline-block;
-    margin-top: var(--space-sm);
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    color: var(--accent-red);
+.review-answer-link {
+    color: var(--gold);
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color var(--transition-fast);
+    border-bottom: 1px solid var(--gold);
+    transition: all var(--transition-fast);
+    font-weight: 500;
 }
 
-.review-wikipedia-link:hover {
+.review-answer-link:hover {
+    color: var(--accent-red);
     border-bottom-color: var(--accent-red);
 }
 

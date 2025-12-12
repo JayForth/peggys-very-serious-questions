@@ -803,11 +803,11 @@ Play at: ${window.location.href}`;
             const item = document.createElement('div');
             item.className = 'review-item';
             
-            // Generate Wikipedia link for wrong answers
-            let wikipediaLink = '';
+            // Generate Wikipedia link for wrong answers - make the answer itself a link
+            let correctAnswerHtml = '';
             if (!answer.isCorrect) {
                 const wikiUrl = this.getWikipediaUrl(answer.correctAnswer);
-                wikipediaLink = `<a href="${wikiUrl}" target="_blank" rel="noopener noreferrer" class="review-wikipedia-link">Learn more on Wikipedia →</a>`;
+                correctAnswerHtml = `<p class="review-correct-answer">Correct answer: <a href="${wikiUrl}" target="_blank" rel="noopener noreferrer" class="review-answer-link">${answer.correctAnswer}</a></p>`;
             }
             
             item.innerHTML = `
@@ -817,8 +817,7 @@ Play at: ${window.location.href}`;
                     <p class="review-your-answer ${answer.isCorrect ? 'correct' : 'incorrect'}">
                         Your answer: ${answer.userAnswer} ${answer.isCorrect ? '✓' : '✗'}
                     </p>
-                    ${!answer.isCorrect ? `<p class="review-correct-answer">Correct answer: ${answer.correctAnswer}</p>` : ''}
-                    ${wikipediaLink}
+                    ${correctAnswerHtml}
                 </div>
             `;
             reviewList.appendChild(item);
