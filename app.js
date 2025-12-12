@@ -161,10 +161,46 @@ class PeggysQuiz {
         await this.loadQuestions();
         this.selectTodaysQuestions();
         this.bindEvents();
+        this.setupKeyboardHandling();
         this.updateDateDisplay();
         this.displayFunFact();
         this.checkWeather();
         this.checkPreviousAttempt();
+    }
+
+    /**
+     * Setup keyboard handling for Android
+     */
+    setupKeyboardHandling() {
+        if (!this.isMobile()) return;
+        
+        const input = document.getElementById('answer-input');
+        if (!input) return;
+        
+        // Handle input focus - ensure it stays visible above keyboard
+        input.addEventListener('focus', () => {
+            setTimeout(() => {
+                const gameScreen = document.getElementById('game-screen');
+                if (gameScreen) {
+                    const inputRect = input.getBoundingClientRect();
+                    const screenHeight = window.innerHeight;
+                    const viewportHeight = window.visualViewport?.height || screenHeight;
+                    
+                    // Calculate if input is hidden by keyboard
+                    const keyboardHeight = screenHeight - viewportHeight;
+                    if (keyboardHeight > 0) {
+                        // Keyboard is open, scroll input above it
+                        const targetScroll = inputRect.top - (viewportHeight * 0.2);
+                        if (targetScroll < gameScreen.scrollTop) {
+                            gameScreen.scrollTo({
+                                top: gameScreen.scrollTop + targetScroll - gameScreen.scrollTop,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                }
+            }, 300); // Wait for keyboard animation
+        });
     }
 
     async loadQuestions() {
@@ -229,6 +265,11 @@ class PeggysQuiz {
             } else {
                 this.submitAnswer();
             }
+        });
+
+        // Skip button
+        document.getElementById('skip-btn').addEventListener('click', () => {
+            this.skipQuestion();
         });
 
         // Enter key to submit/next
@@ -352,7 +393,7 @@ class PeggysQuiz {
             
             const statsPreview = document.getElementById('stats-preview');
             statsPreview.querySelector('.stats-text').textContent = 
-                `You've already completed today's quiz. Score: ${this.score}/10`;
+                `You've already completed today's quiz. Score: ${this.score}/5`;
             
             document.getElementById('start-btn').querySelector('span').textContent = 
                 'View Results';
@@ -396,7 +437,7 @@ class PeggysQuiz {
         document.getElementById('total-questions').textContent = this.todaysQuestions.length;
         
         // Update question number (Roman numerals)
-        const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+        const romanNumerals = ['I', 'II', 'III', 'IV', 'V'];
         document.getElementById('question-number').textContent = romanNumerals[this.currentIndex] + '.';
         
         // Update question text
@@ -413,8 +454,28 @@ class PeggysQuiz {
             // This provides seamless flow between questions
             setTimeout(() => {
                 input.focus();
-                // Scroll input into view above keyboard
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Scroll input into view above keyboard - use 'start' for Android
+                // This ensures input is visible above the keyboard
+                setTimeout(() => {
+                    input.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start',
+                        inline: 'nearest'
+                    });
+                    // Additional scroll adjustment for Android
+                    const gameScreen = document.getElementById('game-screen');
+                    if (gameScreen) {
+                        const inputRect = input.getBoundingClientRect();
+                        const screenHeight = window.innerHeight;
+                        // If input is in lower half, scroll more
+                        if (inputRect.top > screenHeight / 2) {
+                            gameScreen.scrollBy({
+                                top: inputRect.top - (screenHeight * 0.3),
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                }, 300);
             }, 100);
         } else {
             // Desktop: auto-focus immediately
@@ -423,12 +484,38 @@ class PeggysQuiz {
         
         // Reset button to Submit mode
         const submitBtn = document.getElementById('submit-btn');
+        const skipBtn = document.getElementById('skip-btn');
         submitBtn.disabled = false;
+        skipBtn.disabled = false;
         submitBtn.classList.remove('next-mode');
         submitBtn.querySelector('.btn-text').textContent = 'Submit';
         
         const feedback = document.getElementById('feedback');
         feedback.classList.remove('visible', 'correct', 'incorrect');
+    }
+
+    skipQuestion() {
+        const question = this.todaysQuestions[this.currentIndex];
+        
+        // Store answer as skipped (marked as incorrect)
+        this.answers.push({
+            question: question.question,
+            userAnswer: '(skipped)',
+            correctAnswer: question.answer,
+            isCorrect: false
+        });
+        
+        // Show feedback
+        this.showFeedback(false, question.answer);
+        
+        // Transform button to "Next Question"
+        const submitBtn = document.getElementById('submit-btn');
+        const input = document.getElementById('answer-input');
+        input.disabled = true;
+        document.getElementById('skip-btn').disabled = true;
+        submitBtn.disabled = false; // Re-enable for next action
+        submitBtn.classList.add('next-mode');
+        submitBtn.querySelector('.btn-text').textContent = 'Next Question';
     }
 
     submitAnswer() {
@@ -438,8 +525,26 @@ class PeggysQuiz {
         if (!userAnswer) {
             // On mobile, scroll into view instead of just focusing
             if (this.isMobile()) {
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                setTimeout(() => input.focus(), 100);
+                // Scroll input into view above keyboard
+                setTimeout(() => {
+                    input.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start',
+                        inline: 'nearest'
+                    });
+                    const gameScreen = document.getElementById('game-screen');
+                    if (gameScreen) {
+                        const inputRect = input.getBoundingClientRect();
+                        const screenHeight = window.innerHeight;
+                        if (inputRect.top > screenHeight / 2) {
+                            gameScreen.scrollBy({
+                                top: inputRect.top - (screenHeight * 0.3),
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                    setTimeout(() => input.focus(), 100);
+                }, 50);
             } else {
                 input.focus();
             }
@@ -467,6 +572,7 @@ class PeggysQuiz {
         // Transform button to "Next Question"
         const submitBtn = document.getElementById('submit-btn');
         input.disabled = true;
+        document.getElementById('skip-btn').disabled = true;
         submitBtn.disabled = false; // Re-enable for next action
         submitBtn.classList.add('next-mode');
         submitBtn.querySelector('.btn-text').textContent = 'Next Question';
@@ -626,13 +732,8 @@ class PeggysQuiz {
             1: 'A humble beginning. Tomorrow awaits.',
             2: 'Two correct! The journey continues.',
             3: 'A respectable showing.',
-            4: 'Nearly half! Not too shabby.',
-            5: 'A perfectly middling performance.',
-            6: 'Above average, one might say.',
-            7: 'Quite impressive, dear reader.',
-            8: 'Splendid! Peggy would approve.',
-            9: 'Remarkable! Just one shy of perfection.',
-            10: 'Flawless! You are clearly very serious about questions.'
+            4: 'Nearly there! Not too shabby.',
+            5: 'Flawless! You are clearly very serious about questions.'
         };
         document.getElementById('results-message').textContent = messages[this.score];
         
@@ -654,7 +755,7 @@ class PeggysQuiz {
         const squares = this.answers.map(a => a.isCorrect ? '■' : '□').join('');
         
         const shareText = `Peggy's Very Serious Questions
-${dateStr} — ${this.score}/10
+${dateStr} — ${this.score}/5
 
 ${squares}
 
@@ -677,17 +778,38 @@ Play at: ${window.location.href}`;
         }
     }
 
+    /**
+     * Generate Wikipedia URL from answer text
+     */
+    getWikipediaUrl(answer) {
+        // Clean up the answer for Wikipedia URL
+        let searchTerm = answer.trim();
+        // Remove common prefixes/suffixes that might not be in Wikipedia title
+        searchTerm = searchTerm.replace(/^(The|A|An)\s+/i, '');
+        // Replace spaces with underscores and encode
+        searchTerm = encodeURIComponent(searchTerm.replace(/\s+/g, '_'));
+        return `https://en.wikipedia.org/wiki/${searchTerm}`;
+    }
+
     showReview() {
         this.showScreen('review-screen');
         
         const reviewList = document.getElementById('review-list');
         reviewList.innerHTML = '';
         
-        const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+        const romanNumerals = ['I', 'II', 'III', 'IV', 'V'];
         
         this.answers.forEach((answer, index) => {
             const item = document.createElement('div');
             item.className = 'review-item';
+            
+            // Generate Wikipedia link for wrong answers
+            let wikipediaLink = '';
+            if (!answer.isCorrect) {
+                const wikiUrl = this.getWikipediaUrl(answer.correctAnswer);
+                wikipediaLink = `<a href="${wikiUrl}" target="_blank" rel="noopener noreferrer" class="review-wikipedia-link">Learn more on Wikipedia →</a>`;
+            }
+            
             item.innerHTML = `
                 <div class="review-question-num">${romanNumerals[index]}.</div>
                 <p class="review-question-text">${answer.question}</p>
@@ -696,6 +818,7 @@ Play at: ${window.location.href}`;
                         Your answer: ${answer.userAnswer} ${answer.isCorrect ? '✓' : '✗'}
                     </p>
                     ${!answer.isCorrect ? `<p class="review-correct-answer">Correct answer: ${answer.correctAnswer}</p>` : ''}
+                    ${wikipediaLink}
                 </div>
             `;
             reviewList.appendChild(item);

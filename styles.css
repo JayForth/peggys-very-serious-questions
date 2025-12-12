@@ -470,6 +470,13 @@ main.screen.active {
     z-index: 1;
 }
 
+.answer-buttons {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: space-between;
+    align-items: center;
+}
+
 .answer-input {
     font-family: var(--font-body);
     font-size: 1rem;
@@ -503,6 +510,46 @@ main.screen.active {
     .answer-input {
         font-size: 16px !important;
     }
+    
+    /* Android keyboard fixes - ensure input stays visible */
+    #game-screen {
+        padding-bottom: env(keyboard-inset-height, 0px);
+    }
+    
+    .question-card {
+        margin-bottom: env(keyboard-inset-height, 100px);
+    }
+    
+    /* Ensure answer section scrolls into view above keyboard */
+    .answer-section {
+        scroll-margin-bottom: env(keyboard-inset-height, 200px);
+    }
+}
+
+/* Android-specific fixes */
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari */
+}
+
+/* Android Chrome and other browsers */
+@media screen and (max-width: 768px) {
+    body {
+        /* Use visual viewport height to account for keyboard */
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+    
+    #game-screen {
+        /* Ensure game screen can scroll and input stays visible */
+        position: relative;
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+    
+    .answer-input:focus {
+        /* Scroll input into view when focused on Android */
+        scroll-margin: 20px;
+    }
 }
 
 .btn-submit {
@@ -515,10 +562,32 @@ main.screen.active {
     border: 1px solid var(--ink);
     cursor: pointer;
     transition: all var(--transition-fast);
-    align-self: flex-end;
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
+    flex: 1;
+}
+
+.btn-skip {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    padding: 0.7rem var(--space-md);
+    background: transparent;
+    color: var(--ink-muted);
+    border: 1px solid var(--ink-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btn-skip:hover:not(:disabled) {
+    color: var(--ink);
+    border-color: var(--ink);
+}
+
+.btn-skip:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .btn-submit:hover:not(:disabled) {
@@ -780,6 +849,21 @@ main.screen.active {
 .review-correct-answer {
     color: var(--ink-faded);
     font-style: italic;
+}
+
+.review-wikipedia-link {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--accent-red);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition-fast);
+}
+
+.review-wikipedia-link:hover {
+    border-bottom-color: var(--accent-red);
 }
 
 #back-btn {
