@@ -42,7 +42,108 @@ class PeggysQuiz {
             "The Moon has moonquakes.",
             "Peanuts aren't nuts—they're legumes.",
             "A single strand of spaghetti is called a spaghetto.",
-            "The fingerprints of koalas are virtually indistinguishable from human fingerprints."
+            "The fingerprints of koalas are virtually indistinguishable from human fingerprints.",
+            "The average person walks the equivalent of three times around the world in a lifetime.",
+            "A group of porcupines is called a prickle.",
+            "The inventor of the frisbee was turned into a frisbee after he died—his ashes were molded into one.",
+            "Sloths can hold their breath longer than dolphins can.",
+            "The longest English word without a vowel is 'rhythms'.",
+            "There are more trees on Earth than stars in the Milky Way.",
+            "A snail can sleep for three years.",
+            "The Great Wall of China is held together with sticky rice.",
+            "Butterflies taste with their feet.",
+            "The hashtag symbol is technically called an octothorpe.",
+            "Elephants are the only animals that can't jump.",
+            "A crocodile cannot stick its tongue out.",
+            "Armadillos almost always give birth to identical quadruplets.",
+            "The inventor of the microwave only received $2 for his discovery.",
+            "Pigeons can do math at roughly the same level as monkeys.",
+            "A cockroach can live for weeks without its head.",
+            "The shortest complete sentence in English is 'Go.'",
+            "Rats laugh when tickled.",
+            "The unicorn is Scotland's national animal because it was believed to be the natural enemy of the lion—England's symbol.",
+            "There's a basketball court on the top floor of the U.S. Supreme Court building.",
+            "Dolphins have names for each other.",
+            "The electric chair was invented by a dentist.",
+            "A group of owls is called a parliament.",
+            "The inventor of the telephone, Alexander Graham Bell, never called his wife or mother—both were deaf.",
+            "Strawberries can be white, yellow, or green—red isn't their only color.",
+            "Sea otters hold hands while sleeping so they don't drift apart.",
+            "The longest wedding veil was longer than 63 football fields.",
+            "A flock of crows is called a murder.",
+            "The average cloud travels at 30 miles per hour.",
+            "Hippo milk is pink.",
+            "The Twitter bird has a name—Larry.",
+            "The King of Hearts is the only king without a mustache in a standard deck of cards.",
+            "Vending machines kill more people each year than sharks do.",
+            "The oldest known living tree is over 5,000 years old.",
+            "A bolt of lightning is five times hotter than the surface of the sun.",
+            "The inventor of Vaseline ate a spoonful of it every day.",
+            "The average person spends six months of their life waiting for red lights to turn green.",
+            "Cows moo with regional accents.",
+            "A group of pandas is called an embarrassment.",
+            "The longest place name in the world has 85 letters.",
+            "Mosquitoes are attracted to people who just ate bananas.",
+            "The first oranges weren't orange—they were green.",
+            "A blue whale's heart is the size of a small car.",
+            "Cats have fewer toes on their back paws than their front paws.",
+            "The shortest commercial flight lasts only 57 seconds.",
+            "Polar bears have black skin under their white fur.",
+            "The dot on a lowercase 'i' was added to distinguish it from similar letters in medieval handwriting.",
+            "Your nose can detect over 1 trillion different scents.",
+            "Honey is the only food that includes all the substances necessary to sustain life.",
+            "A group of rabbits is called a fluffle.",
+            "The average person produces enough saliva in their lifetime to fill two swimming pools.",
+            "Nintendo was founded in 1889 as a playing card company.",
+            "Camels have three eyelids to protect themselves from sand.",
+            "The longest hiccup attack lasted 68 years—Charles Osborne hiccuped from 1922 to 1990.",
+            "A hummingbird weighs less than a penny.",
+            "You can hear a blue whale's heartbeat from over two miles away.",
+            "A jiffy is actually 1/100th of a second in computer engineering.",
+            "Astronauts cannot cry in space—the tears just form bubbles.",
+            "The Hawaiian alphabet has only 12 letters.",
+            "A group of jellyfish is called a smack.",
+            "The longest time between two twins being born is 87 days.",
+            "Horses can't breathe through their mouths.",
+            "A single lightning bolt can toast 100,000 slices of bread.",
+            "The human brain uses the same amount of power as a 10-watt light bulb.",
+            "A shrimp's heart is in its head.",
+            "The average person will spend 2 weeks of their lifetime waiting for traffic lights.",
+            "Bees can recognize human faces.",
+            "The first computer mouse was made of wood.",
+            "A group of pugs is called a grumble.",
+            "The longest time anyone has gone without sleep is 11 days.",
+            "Crows can remember human faces and hold grudges.",
+            "The letter 'E' appears in 11% of all English words.",
+            "Venus is the only planet that spins clockwise.",
+            "A group of cats is called a clowder.",
+            "The first alarm clock could only ring at 4 AM.",
+            "An ostrich's eye is bigger than its brain.",
+            "Movie trailers were originally shown after the movie—hence the name 'trailers'.",
+            "A group of hippos is called a bloat.",
+            "The first product to have a barcode was Wrigley's gum.",
+            "Lobsters taste with their feet.",
+            "The longest word you can type with only your left hand is 'stewardesses'.",
+            "Goldfish can see infrared and ultraviolet light.",
+            "A group of apes is called a shrewdness.",
+            "The original Monopoly game was designed to teach about the evils of capitalism.",
+            "Your fingernails grow faster on your dominant hand.",
+            "A jiffy is also the time it takes for light to travel one centimeter in physics.",
+            "Humans are the only animals that blush.",
+            "A group of ferrets is called a business.",
+            "The word 'alphabet' comes from the first two Greek letters: alpha and beta.",
+            "An octopus has nine brains—one central brain and one in each arm.",
+            "The first emoji was created in 1999 by a Japanese artist.",
+            "A group of rhinoceroses is called a crash.",
+            "The inventor of the chocolate chip cookie sold her recipe to Nestlé for a lifetime supply of chocolate.",
+            "Adult cats only meow to communicate with humans, not other cats.",
+            "A group of zebras is called a dazzle.",
+            "Your taste buds are replaced every two weeks.",
+            "The longest English word with letters in alphabetical order is 'almost'.",
+            "A group of squirrels is called a scurry.",
+            "The human eye can distinguish about 10 million different colors.",
+            "A group of hedgehogs is called a prickle.",
+            "The first YouTube video was uploaded on April 23, 2005—it was about elephants at a zoo."
         ];
         
         this.init();
@@ -120,28 +221,26 @@ class PeggysQuiz {
             this.startGame();
         });
 
-        // Submit answer
+        // Submit/Next button (transforms based on state)
         document.getElementById('submit-btn').addEventListener('click', () => {
-            this.submitAnswer();
-        });
-
-        // Enter key to submit
-        document.getElementById('answer-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const submitBtn = document.getElementById('submit-btn');
-                const nextBtn = document.getElementById('next-btn');
-                
-                if (!submitBtn.disabled) {
-                    this.submitAnswer();
-                } else if (!nextBtn.classList.contains('hidden')) {
-                    this.nextQuestion();
-                }
+            const submitBtn = document.getElementById('submit-btn');
+            if (submitBtn.classList.contains('next-mode')) {
+                this.nextQuestion();
+            } else {
+                this.submitAnswer();
             }
         });
 
-        // Next question
-        document.getElementById('next-btn').addEventListener('click', () => {
-            this.nextQuestion();
+        // Enter key to submit/next
+        document.getElementById('answer-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const submitBtn = document.getElementById('submit-btn');
+                if (submitBtn.classList.contains('next-mode')) {
+                    this.nextQuestion();
+                } else if (!submitBtn.disabled) {
+                    this.submitAnswer();
+                }
+            }
         });
 
         // Share button
@@ -322,8 +421,11 @@ class PeggysQuiz {
             input.focus();
         }
         
-        document.getElementById('submit-btn').disabled = false;
-        document.getElementById('next-btn').classList.add('hidden');
+        // Reset button to Submit mode
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('next-mode');
+        submitBtn.querySelector('.btn-text').textContent = 'Submit';
         
         const feedback = document.getElementById('feedback');
         feedback.classList.remove('visible', 'correct', 'incorrect');
@@ -362,10 +464,12 @@ class PeggysQuiz {
         // Show feedback
         this.showFeedback(isCorrect, question.answer);
         
-        // Disable input and submit button
+        // Transform button to "Next Question"
+        const submitBtn = document.getElementById('submit-btn');
         input.disabled = true;
-        document.getElementById('submit-btn').disabled = true;
-        document.getElementById('next-btn').classList.remove('hidden');
+        submitBtn.disabled = false; // Re-enable for next action
+        submitBtn.classList.add('next-mode');
+        submitBtn.querySelector('.btn-text').textContent = 'Next Question';
     }
 
     /**
@@ -481,20 +585,9 @@ class PeggysQuiz {
             correctAnswerEl.textContent = `The answer was: ${correctAnswer}`;
         }
         
-        // On mobile, ensure Next button is visible after feedback appears
-        if (this.isMobile()) {
-            setTimeout(() => {
-                const nextBtn = document.getElementById('next-btn');
-                if (nextBtn && !nextBtn.classList.contains('hidden')) {
-                    // Scroll to show Next button (it's sticky, but ensure it's in viewport)
-                    nextBtn.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'end',
-                        inline: 'nearest'
-                    });
-                }
-            }, 400); // Wait for feedback transition
-        }
+        // On mobile, ensure submit/next button stays visible after feedback appears
+        // The button is already in the answer section, so it should be visible
+        // No need for extra scrolling since it's in the same container
     }
 
     nextQuestion() {
