@@ -750,11 +750,10 @@ body {
 }
 
 .footer-text {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--ink-faded);
 }
 
 /* ===================================
