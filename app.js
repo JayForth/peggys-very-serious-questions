@@ -49,6 +49,14 @@ class PeggysQuiz {
     }
 
     async init() {
+        // Check for reset parameter
+        if (window.location.search.includes('reset=true')) {
+            const today = this.getTodayKey();
+            localStorage.removeItem(`peggy-quiz-${today}`);
+            window.location.href = window.location.pathname;
+            return;
+        }
+        
         await this.loadQuestions();
         this.selectTodaysQuestions();
         this.bindEvents();
@@ -101,6 +109,11 @@ class PeggysQuiz {
         return Math.abs(hash);
     }
 
+    isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+            || window.innerWidth <= 768;
+    }
+
     bindEvents() {
         // Start button
         document.getElementById('start-btn').addEventListener('click', () => {
@@ -149,6 +162,11 @@ class PeggysQuiz {
         // Home link (Peggy + title)
         document.getElementById('home-link').addEventListener('click', (e) => {
             e.preventDefault();
+            this.showScreen('start-screen');
+        });
+
+        // Quit button (exit quiz)
+        document.getElementById('quit-btn').addEventListener('click', () => {
             this.showScreen('start-screen');
         });
     }
@@ -289,7 +307,19 @@ class PeggysQuiz {
         const input = document.getElementById('answer-input');
         input.value = '';
         input.disabled = false;
-        input.focus();
+        
+        // Handle focus differently on mobile vs desktop
+        if (this.isMobile()) {
+            // On mobile, don't auto-focus to prevent keyboard popup
+            // Let user tap to focus naturally
+            setTimeout(() => {
+                // Smoothly scroll input into view when ready
+                input.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        } else {
+            // Desktop: auto-focus immediately
+            input.focus();
+        }
         
         document.getElementById('submit-btn').disabled = false;
         document.getElementById('next-btn').classList.add('hidden');
@@ -303,7 +333,13 @@ class PeggysQuiz {
         const userAnswer = input.value.trim();
         
         if (!userAnswer) {
-            input.focus();
+            // On mobile, scroll into view instead of just focusing
+            if (this.isMobile()) {
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => input.focus(), 100);
+            } else {
+                input.focus();
+            }
             return;
         }
         

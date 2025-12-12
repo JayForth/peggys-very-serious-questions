@@ -44,6 +44,8 @@
 html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
+    height: 100%;
+    height: -webkit-fill-available;
 }
 
 body {
@@ -53,7 +55,9 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     min-height: 100dvh;
+    min-height: -webkit-fill-available;
     overflow-x: hidden;
+    position: relative;
 }
 
 /* App Container */
@@ -62,10 +66,18 @@ body {
     margin: 0 auto;
     min-height: 100vh;
     min-height: 100dvh;
+    min-height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     padding: var(--space-md);
     position: relative;
+}
+
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific fixes */
+    .app-container {
+        height: -webkit-fill-available;
+    }
 }
 
 /* ===================================
@@ -358,6 +370,33 @@ body {
 /* ===================================
    Game Screen
    =================================== */
+.game-screen {
+    /* Prevent layout shift when keyboard opens */
+    scroll-behavior: smooth;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+}
+
+.btn-quit {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-xs) 0;
+    transition: color var(--transition-fast);
+}
+
+.btn-quit:hover {
+    color: var(--ink);
+}
+
 .progress-bar {
     width: 100%;
     height: 2px;
@@ -374,13 +413,11 @@ body {
 }
 
 .question-counter {
-    text-align: center;
     font-family: var(--font-body);
     font-size: 0.75rem;
     color: var(--ink-muted);
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: var(--space-md);
 }
 
 .question-card {
@@ -434,6 +471,8 @@ body {
     color: var(--ink);
     width: 100%;
     transition: border-color var(--transition-fast);
+    /* Prevent zoom on iOS when focusing */
+    font-size: 16px;
 }
 
 .answer-input:focus {
@@ -448,6 +487,13 @@ body {
 
 .answer-input:disabled {
     opacity: 0.6;
+}
+
+/* Prevent iOS from zooming when input is focused */
+@media screen and (max-width: 768px) {
+    .answer-input {
+        font-size: 16px !important;
+    }
 }
 
 .btn-submit {

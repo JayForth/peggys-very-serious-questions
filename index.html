@@ -60,12 +60,15 @@
 
         <!-- Game Screen -->
         <main id="game-screen" class="screen">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
+            <div class="game-header">
+                <button id="quit-btn" class="btn-quit">← Exit</button>
+                <div class="question-counter">
+                    <span id="current-question">1</span> of <span id="total-questions">10</span>
+                </div>
             </div>
             
-            <div class="question-counter">
-                <span id="current-question">1</span> of <span id="total-questions">10</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
             </div>
 
             <article class="question-card">
@@ -80,6 +83,8 @@
                         placeholder="Your answer..."
                         autocomplete="off"
                         autocapitalize="off"
+                        inputmode="text"
+                        enterkeyhint="done"
                     >
                     <button id="submit-btn" class="btn-submit">
                         Submit
