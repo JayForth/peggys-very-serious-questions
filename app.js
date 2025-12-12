@@ -11,6 +11,9 @@ class PeggysQuiz {
         this.score = 0;
         this.answers = [];
         this.gameComplete = false;
+        this.startTime = null;
+        this.endTime = null;
+        this.stats = this.loadStats();
         
         this.funFacts = [
             "Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible.",
@@ -166,6 +169,7 @@ class PeggysQuiz {
         this.displayFunFact();
         this.checkWeather();
         this.checkPreviousAttempt();
+        this.displayStats();
     }
 
     /**
@@ -381,6 +385,59 @@ class PeggysQuiz {
         }
     }
 
+    loadStats() {
+        const statsData = localStorage.getItem('peggy-quiz-stats');
+        if (statsData) {
+            return JSON.parse(statsData);
+        }
+        return {
+            totalGames: 0,
+            totalQuestions: 0,
+            totalCorrect: 0,
+            bestStreak: 0,
+            currentStreak: 0,
+            lastPlayedDate: null,
+            scores: []
+        };
+    }
+
+    saveStats() {
+        localStorage.setItem('peggy-quiz-stats', JSON.stringify(this.stats));
+    }
+
+    updateStreak() {
+        const today = this.getTodayKey();
+        const yesterday = this.getYesterdayKey();
+        
+        if (this.stats.lastPlayedDate === today) {
+            // Already played today, don't update streak
+            return;
+        }
+        
+        if (this.stats.lastPlayedDate === yesterday) {
+            // Consecutive day - increment streak
+            this.stats.currentStreak++;
+        } else if (this.stats.lastPlayedDate !== null) {
+            // Streak broken - reset to 1
+            this.stats.currentStreak = 1;
+        } else {
+            // First time playing
+            this.stats.currentStreak = 1;
+        }
+        
+        if (this.stats.currentStreak > this.stats.bestStreak) {
+            this.stats.bestStreak = this.stats.currentStreak;
+        }
+        
+        this.stats.lastPlayedDate = today;
+    }
+
+    getYesterdayKey() {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        return `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+    }
+
     checkPreviousAttempt() {
         const today = this.getTodayKey();
         const savedData = localStorage.getItem(`peggy-quiz-${today}`);
@@ -390,14 +447,43 @@ class PeggysQuiz {
             this.answers = data.answers;
             this.score = data.score;
             this.gameComplete = true;
+            this.endTime = data.endTime || null;
+            
+            this.displayStats();
             
             const statsPreview = document.getElementById('stats-preview');
             statsPreview.querySelector('.stats-text').textContent = 
-                `You've already completed today's quiz. Score: ${this.score}/5`;
+                `You've already completed today's quiz. Score: ${this.score}/${this.todaysQuestions.length}`;
             
             document.getElementById('start-btn').querySelector('span').textContent = 
                 'View Results';
+        } else {
+            this.displayStats();
         }
+    }
+
+    displayStats() {
+        const statsEl = document.getElementById('stats-display');
+        if (!statsEl) return;
+        
+        const avgScore = this.stats.totalGames > 0 
+            ? (this.stats.totalCorrect / this.stats.totalQuestions * 100).toFixed(0)
+            : 0;
+        
+        statsEl.innerHTML = `
+            <div class="stat-item">
+                <span class="stat-label">Streak</span>
+                <span class="stat-value streak-value">${this.stats.currentStreak} 🔥</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Avg Score</span>
+                <span class="stat-value">${avgScore}%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Games Played</span>
+                <span class="stat-value">${this.stats.totalGames}</span>
+            </div>
+        `;
     }
 
     getTodayKey() {
@@ -414,6 +500,7 @@ class PeggysQuiz {
         this.currentIndex = 0;
         this.score = 0;
         this.answers = [];
+        this.startTime = Date.now();
         this.showScreen('game-screen');
         this.displayQuestion();
     }
@@ -428,9 +515,12 @@ class PeggysQuiz {
     displayQuestion() {
         const question = this.todaysQuestions[this.currentIndex];
         
-        // Update progress
+        // Update progress with smooth animation
         const progress = ((this.currentIndex) / this.todaysQuestions.length) * 100;
-        document.getElementById('progress-fill').style.width = `${progress}%`;
+        const progressFill = document.getElementById('progress-fill');
+        // Force reflow for smooth animation
+        progressFill.offsetWidth;
+        progressFill.style.width = `${progress}%`;
         
         // Update counter
         document.getElementById('current-question').textContent = this.currentIndex + 1;
@@ -502,7 +592,8 @@ class PeggysQuiz {
             question: question.question,
             userAnswer: '(skipped)',
             correctAnswer: question.answer,
-            isCorrect: false
+            isCorrect: false,
+            category: this.getQuestionCategory(question.question)
         });
         
         // Show feedback
@@ -554,12 +645,13 @@ class PeggysQuiz {
         const question = this.todaysQuestions[this.currentIndex];
         const isCorrect = this.checkAnswer(userAnswer, question.answer, question.alternateAnswers);
         
-        // Store answer
+        // Store answer with category
         this.answers.push({
             question: question.question,
             userAnswer: userAnswer,
             correctAnswer: question.answer,
-            isCorrect: isCorrect
+            isCorrect: isCorrect,
+            category: this.getQuestionCategory(question.question)
         });
         
         if (isCorrect) {
@@ -662,8 +754,13 @@ class PeggysQuiz {
         const feedbackText = document.getElementById('feedback-text');
         const correctAnswerEl = document.getElementById('correct-answer');
         
-        feedback.classList.remove('correct', 'incorrect');
+        feedback.classList.remove('correct', 'incorrect', 'animate-bounce', 'animate-shake');
         feedback.classList.add('visible', isCorrect ? 'correct' : 'incorrect');
+        
+        // Add animation class
+        setTimeout(() => {
+            feedback.classList.add(isCorrect ? 'animate-bounce' : 'animate-shake');
+        }, 10);
         
         if (isCorrect) {
             feedbackIcon.textContent = '✓';
@@ -708,13 +805,34 @@ class PeggysQuiz {
 
     endGame() {
         this.gameComplete = true;
+        this.endTime = Date.now();
+        const timeTaken = Math.round((this.endTime - this.startTime) / 1000);
+        
+        // Update statistics
+        this.updateStreak();
+        this.stats.totalGames++;
+        this.stats.totalQuestions += this.todaysQuestions.length;
+        this.stats.totalCorrect += this.score;
+        this.stats.scores.push({
+            date: this.getTodayKey(),
+            score: this.score,
+            total: this.todaysQuestions.length,
+            timeTaken: timeTaken
+        });
+        // Keep only last 30 days of scores
+        if (this.stats.scores.length > 30) {
+            this.stats.scores.shift();
+        }
+        this.saveStats();
         
         // Save to localStorage
         const today = this.getTodayKey();
         localStorage.setItem(`peggy-quiz-${today}`, JSON.stringify({
             score: this.score,
             answers: this.answers,
-            date: today
+            date: today,
+            timeTaken: timeTaken,
+            endTime: this.endTime
         }));
         
         this.showResults();
@@ -726,7 +844,21 @@ class PeggysQuiz {
         // Update score
         document.getElementById('final-score').textContent = this.score;
         
+        // Get time taken
+        let timeTaken = null;
+        if (this.endTime && this.startTime) {
+            timeTaken = Math.round((this.endTime - this.startTime) / 1000);
+        } else {
+            const today = this.getTodayKey();
+            const savedData = localStorage.getItem(`peggy-quiz-${today}`);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                timeTaken = data.timeTaken || null;
+            }
+        }
+        
         // Update message
+        const totalQuestions = this.todaysQuestions.length;
         const messages = {
             0: 'Perhaps the questions were too serious today.',
             1: 'A humble beginning. Tomorrow awaits.',
@@ -735,31 +867,117 @@ class PeggysQuiz {
             4: 'Nearly there! Not too shabby.',
             5: 'Flawless! You are clearly very serious about questions.'
         };
-        document.getElementById('results-message').textContent = messages[this.score];
+        const message = messages[this.score] || `You got ${this.score} out of ${totalQuestions} correct.`;
+        document.getElementById('results-message').textContent = message;
         
-        // Create breakdown dots
+        // Add time taken if available
+        const timeDisplay = document.getElementById('time-taken');
+        if (timeDisplay) {
+            if (timeTaken) {
+                const minutes = Math.floor(timeTaken / 60);
+                const seconds = timeTaken % 60;
+                timeDisplay.textContent = `Completed in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                timeDisplay.style.display = 'block';
+            } else {
+                timeDisplay.style.display = 'none';
+            }
+        }
+        
+        // Create breakdown dots with animation
         const breakdown = document.getElementById('results-breakdown');
         breakdown.innerHTML = '';
         this.answers.forEach((answer, index) => {
             const dot = document.createElement('div');
             dot.className = `result-dot ${answer.isCorrect ? 'correct' : 'incorrect'}`;
             dot.textContent = index + 1;
+            dot.style.animationDelay = `${index * 0.1}s`;
             breakdown.appendChild(dot);
+        });
+        
+        // Show category breakdown
+        this.displayCategoryBreakdown();
+        
+        // Show confetti for perfect score
+        if (this.score === totalQuestions && totalQuestions > 0) {
+            this.showConfetti();
+        }
+        
+        // Update streak display
+        this.displayStats();
+    }
+
+    showConfetti() {
+        const confettiCount = 50;
+        const confettiColors = ['#8B3A3A', '#3A5F4A', '#9A8B6F', '#1C1C1C'];
+        const confettiContainer = document.createElement('div');
+        confettiContainer.className = 'confetti-container';
+        document.body.appendChild(confettiContainer);
+        
+        for (let i = 0; i < confettiCount; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            confettiContainer.appendChild(confetti);
+        }
+        
+        setTimeout(() => {
+            confettiContainer.remove();
+        }, 3000);
+    }
+
+    displayCategoryBreakdown() {
+        // Count categories
+        const categoryStats = {};
+        this.answers.forEach(answer => {
+            if (!categoryStats[answer.category]) {
+                categoryStats[answer.category] = { total: 0, correct: 0 };
+            }
+            categoryStats[answer.category].total++;
+            if (answer.isCorrect) {
+                categoryStats[answer.category].correct++;
+            }
+        });
+        
+        // Create category display
+        const categoryContainer = document.getElementById('category-breakdown');
+        if (!categoryContainer) return;
+        
+        categoryContainer.innerHTML = '';
+        
+        const categories = Object.keys(categoryStats).sort();
+        if (categories.length === 0) return;
+        
+        categories.forEach(category => {
+            const stat = categoryStats[category];
+            const percentage = Math.round((stat.correct / stat.total) * 100);
+            const categoryEl = document.createElement('div');
+            categoryEl.className = 'category-item';
+            categoryEl.innerHTML = `
+                <span class="category-name">${category}</span>
+                <span class="category-score">${stat.correct}/${stat.total} (${percentage}%)</span>
+            `;
+            categoryContainer.appendChild(categoryEl);
         });
     }
 
     shareResults() {
         const today = new Date();
         const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const totalQuestions = this.todaysQuestions.length;
+        const percentage = Math.round((this.score / totalQuestions) * 100);
         
-        const squares = this.answers.map(a => a.isCorrect ? '■' : '□').join('');
+        const squares = this.answers.map(a => a.isCorrect ? '🟩' : '⬜').join('');
+        const emoji = this.score === totalQuestions ? '🎉' : this.score >= totalQuestions * 0.8 ? '✨' : this.score >= totalQuestions * 0.6 ? '👍' : '📚';
         
-        const shareText = `Peggy's Very Serious Questions
-${dateStr} — ${this.score}/5
+        const shareText = `${emoji} Peggy's Very Serious Questions
+${dateStr} — ${this.score}/${totalQuestions} (${percentage}%)
 
 ${squares}
 
-Play at: ${window.location.href}`;
+${this.stats.currentStreak > 1 ? `🔥 ${this.stats.currentStreak} day streak!\n\n` : ''}Play at: ${window.location.href}`;
         
         if (navigator.share) {
             navigator.share({
@@ -770,12 +988,51 @@ Play at: ${window.location.href}`;
             navigator.clipboard.writeText(shareText).then(() => {
                 const btn = document.getElementById('share-btn');
                 const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
                 setTimeout(() => {
                     btn.textContent = originalText;
+                    btn.classList.remove('copied');
                 }, 2000);
             }).catch(console.error);
         }
+    }
+
+    /**
+     * Categorize a question based on keywords
+     */
+    getQuestionCategory(question) {
+        const q = question.toLowerCase();
+        
+        if (q.includes('wrote') || q.includes('author') || q.includes('novel') || q.includes('poem') || q.includes('play') || q.includes('book')) {
+            return 'Literature';
+        }
+        if (q.includes('painted') || q.includes('artist') || q.includes('painting') || q.includes('sculpted') || q.includes('sculpture')) {
+            return 'Art';
+        }
+        if (q.includes('composed') || q.includes('composer') || q.includes('symphony') || q.includes('opera') || q.includes('sonata')) {
+            return 'Music';
+        }
+        if (q.includes('capital') || q.includes('country') || q.includes('city') || q.includes('continent') || q.includes('ocean') || q.includes('river') || q.includes('mountain')) {
+            return 'Geography';
+        }
+        if (q.includes('chemical') || q.includes('element') || q.includes('symbol') || q.includes('formula') || q.includes('atom')) {
+            return 'Science';
+        }
+        if (q.includes('planet') || q.includes('moon') || q.includes('solar system') || q.includes('star') || q.includes('galaxy')) {
+            return 'Astronomy';
+        }
+        if (q.includes('year') || q.includes('century') || q.includes('war') || q.includes('empire') || q.includes('revolution') || q.includes('discovered') || q.includes('invented')) {
+            return 'History';
+        }
+        if (q.includes('organ') || q.includes('bone') || q.includes('body') || q.includes('blood') || q.includes('heart') || q.includes('cell')) {
+            return 'Biology';
+        }
+        if (q.includes('animal') || q.includes('species') || q.includes('mammal') || q.includes('bird') || q.includes('fish')) {
+            return 'Nature';
+        }
+        
+        return 'General';
     }
 
     /**
