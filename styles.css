@@ -112,7 +112,7 @@ body {
 }
 
 .title {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 2.2rem;
     font-weight: 400;
     letter-spacing: 0.01em;
@@ -370,9 +370,15 @@ body {
 /* ===================================
    Game Screen
    =================================== */
-.game-screen {
+#game-screen {
     /* Prevent layout shift when keyboard opens */
     scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Account for keyboard on mobile */
+    padding-bottom: 20px;
 }
 
 .game-header {
@@ -459,6 +465,9 @@ body {
     flex-direction: column;
     gap: var(--space-sm);
     margin-top: auto;
+    /* Ensure input area stays accessible */
+    position: relative;
+    z-index: 1;
 }
 
 .answer-input {
@@ -594,6 +603,11 @@ body {
     margin-top: var(--space-lg);
     transition: all var(--transition-fast);
     align-self: center;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: var(--cream);
+    padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
 }
 
 .btn-next:hover {
@@ -603,6 +617,38 @@ body {
 
 .btn-next.hidden {
     display: none;
+}
+
+/* Mobile: Ensure button stays above keyboard */
+@media screen and (max-width: 768px) {
+    .btn-next {
+        position: sticky;
+        bottom: 0;
+        margin-top: var(--space-md);
+        margin-bottom: var(--space-sm);
+        /* Add shadow and background for visibility above keyboard */
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        background: var(--cream) !important;
+        /* Account for safe areas on notched devices */
+        padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
+        margin-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom, 0px));
+    }
+    
+    /* Ensure game screen is scrollable and accounts for keyboard */
+    #game-screen {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        /* Extra padding at bottom for sticky button */
+        padding-bottom: 100px;
+        /* Use visual viewport height when available */
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+    
+    /* Ensure question card doesn't get cut off */
+    .question-card {
+        margin-bottom: var(--space-md);
+    }
 }
 
 /* ===================================

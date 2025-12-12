@@ -310,12 +310,13 @@ class PeggysQuiz {
         
         // Handle focus differently on mobile vs desktop
         if (this.isMobile()) {
-            // On mobile, don't auto-focus to prevent keyboard popup
-            // Let user tap to focus naturally
+            // On mobile, auto-focus to bring keyboard back for next question
+            // This provides seamless flow between questions
             setTimeout(() => {
-                // Smoothly scroll input into view when ready
-                input.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 300);
+                input.focus();
+                // Scroll input into view above keyboard
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
         } else {
             // Desktop: auto-focus immediately
             input.focus();
@@ -361,7 +362,7 @@ class PeggysQuiz {
         // Show feedback
         this.showFeedback(isCorrect, question.answer);
         
-        // Disable input
+        // Disable input and submit button
         input.disabled = true;
         document.getElementById('submit-btn').disabled = true;
         document.getElementById('next-btn').classList.remove('hidden');
@@ -480,15 +481,19 @@ class PeggysQuiz {
             correctAnswerEl.textContent = `The answer was: ${correctAnswer}`;
         }
         
-        // On mobile, smoothly scroll feedback into view after it appears
+        // On mobile, ensure Next button is visible after feedback appears
         if (this.isMobile()) {
             setTimeout(() => {
-                feedback.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'nearest',
-                    inline: 'nearest'
-                });
-            }, 350); // Wait for transition to start
+                const nextBtn = document.getElementById('next-btn');
+                if (nextBtn && !nextBtn.classList.contains('hidden')) {
+                    // Scroll to show Next button (it's sticky, but ensure it's in viewport)
+                    nextBtn.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'end',
+                        inline: 'nearest'
+                    });
+                }
+            }, 400); // Wait for feedback transition
         }
     }
 
