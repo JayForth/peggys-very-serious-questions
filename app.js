@@ -219,7 +219,7 @@ class PeggysQuiz {
     }
 
     /**
-     * Select 10 questions for today based on the date
+     * Select 5 questions for today based on the date
      * Uses a seeded random to ensure everyone gets the same questions each day
      */
     selectTodaysQuestions() {
@@ -237,7 +237,7 @@ class PeggysQuiz {
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         
-        this.todaysQuestions = shuffled.slice(0, 10);
+        this.todaysQuestions = shuffled.slice(0, 5);
     }
 
     hashCode(str) {
@@ -473,7 +473,7 @@ class PeggysQuiz {
         statsEl.innerHTML = `
             <div class="stat-item">
                 <span class="stat-label">Streak</span>
-                <span class="stat-value streak-value">${this.stats.currentStreak} 🔥</span>
+                <span class="stat-value streak-value">${this.stats.currentStreak}</span>
             </div>
             <div class="stat-item">
                 <span class="stat-label">Avg Score</span>
@@ -754,13 +754,15 @@ class PeggysQuiz {
         const feedbackText = document.getElementById('feedback-text');
         const correctAnswerEl = document.getElementById('correct-answer');
         
-        feedback.classList.remove('correct', 'incorrect', 'animate-bounce', 'animate-shake');
+        feedback.classList.remove('correct', 'incorrect', 'animate-bounce');
         feedback.classList.add('visible', isCorrect ? 'correct' : 'incorrect');
         
-        // Add animation class
-        setTimeout(() => {
-            feedback.classList.add(isCorrect ? 'animate-bounce' : 'animate-shake');
-        }, 10);
+        // Add animation class for correct answers only
+        if (isCorrect) {
+            setTimeout(() => {
+                feedback.classList.add('animate-bounce');
+            }, 10);
+        }
         
         if (isCorrect) {
             feedbackIcon.textContent = '✓';
@@ -932,12 +934,14 @@ class PeggysQuiz {
         // Count categories
         const categoryStats = {};
         this.answers.forEach(answer => {
-            if (!categoryStats[answer.category]) {
-                categoryStats[answer.category] = { total: 0, correct: 0 };
+            // Ensure category is always defined
+            const category = answer.category || 'General';
+            if (!categoryStats[category]) {
+                categoryStats[category] = { total: 0, correct: 0 };
             }
-            categoryStats[answer.category].total++;
+            categoryStats[category].total++;
             if (answer.isCorrect) {
-                categoryStats[answer.category].correct++;
+                categoryStats[category].correct++;
             }
         });
         
@@ -947,7 +951,7 @@ class PeggysQuiz {
         
         categoryContainer.innerHTML = '';
         
-        const categories = Object.keys(categoryStats).sort();
+        const categories = Object.keys(categoryStats).filter(cat => cat && cat !== 'undefined').sort();
         if (categories.length === 0) return;
         
         categories.forEach(category => {
@@ -977,7 +981,7 @@ ${dateStr} — ${this.score}/${totalQuestions} (${percentage}%)
 
 ${squares}
 
-${this.stats.currentStreak > 1 ? `🔥 ${this.stats.currentStreak} day streak!\n\n` : ''}Play at: ${window.location.href}`;
+${this.stats.currentStreak > 1 ? `${this.stats.currentStreak} day streak\n\n` : ''}Play at: ${window.location.href}`;
         
         if (navigator.share) {
             navigator.share({
