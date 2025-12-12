@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Peggy's Very Serious Questions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <a href="#" class="header-home-link" id="home-link">
+                <div class="header-mascot">
+                    <img src="peggy.png" alt="Peggy the terrier" class="mascot-img">
+                </div>
+                <div class="header-line"></div>
+                <h1 class="title">Peggy's</h1>
+                <p class="subtitle">Very Serious Questions</p>
+            </a>
+        </header>
+
+        <!-- Start Screen -->
+        <main id="start-screen" class="screen active">
+            <div class="start-content">
+                <div class="info-sections">
+                    <!-- Today's Edition -->
+                    <section class="info-card primary">
+                        <h2 class="info-card-title">Today's Edition</h2>
+                        <p class="info-card-content" id="today-date"></p>
+                        <p class="info-card-subtitle">Ten questions await you, dear reader.</p>
+                    </section>
+
+                    <!-- Fun Fact -->
+                    <section class="info-card secondary">
+                        <h2 class="info-card-title">A Fun Fact</h2>
+                        <p class="info-card-content" id="fun-fact"></p>
+                    </section>
+
+                    <!-- Weather / Coat Check -->
+                    <section class="info-card secondary">
+                        <h2 class="info-card-title">Does Becky Need a Coat?</h2>
+                        <p class="info-card-content coat-verdict" id="coat-verdict">Checking...</p>
+                        <p class="info-card-subtitle" id="weather-details">Sheffield, UK</p>
+                    </section>
+                </div>
+
+                <button id="start-btn" class="btn-primary">
+                    <span>Begin Today's Quiz</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+
+                <div class="stats-preview" id="stats-preview">
+                    <p class="stats-text"></p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Game Screen -->
+        <main id="game-screen" class="screen">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            
+            <div class="question-counter">
+                <span id="current-question">1</span> of <span id="total-questions">10</span>
+            </div>
+
+            <article class="question-card">
+                <div class="question-number" id="question-number">I.</div>
+                <p class="question-text" id="question-text"></p>
+                
+                <div class="answer-section">
+                    <input 
+                        type="text" 
+                        id="answer-input" 
+                        class="answer-input" 
+                        placeholder="Your answer..."
+                        autocomplete="off"
+                        autocapitalize="off"
+                    >
+                    <button id="submit-btn" class="btn-submit">
+                        Submit
+                    </button>
+                </div>
+
+                <div class="feedback" id="feedback">
+                    <div class="feedback-header">
+                        <span class="feedback-icon" id="feedback-icon"></span>
+                        <span class="feedback-text" id="feedback-text"></span>
+                    </div>
+                    <p class="correct-answer" id="correct-answer"></p>
+                </div>
+            </article>
+
+            <button id="next-btn" class="btn-next hidden">
+                <span>Next Question</span>
+                <span class="btn-arrow">→</span>
+            </button>
+        </main>
+
+        <!-- Results Screen -->
+        <main id="results-screen" class="screen">
+            <div class="results-content">
+                <div class="results-ornament">✦</div>
+                
+                <h2 class="results-title">Finis</h2>
+                
+                <div class="score-display">
+                    <span class="score-number" id="final-score">0</span>
+                    <span class="score-divider">/</span>
+                    <span class="score-total">10</span>
+                </div>
+
+                <p class="results-message" id="results-message"></p>
+
+                <div class="results-breakdown" id="results-breakdown"></div>
+
+                <div class="share-section">
+                    <button id="share-btn" class="btn-share">
+                        Share Your Score
+                    </button>
+                </div>
+
+                <p class="return-message">
+                    Return tomorrow for a fresh set of inquiries.
+                </p>
+
+                <button id="review-btn" class="btn-secondary">
+                    Review Answers
+                </button>
+            </div>
+        </main>
+
+        <!-- Review Screen -->
+        <main id="review-screen" class="screen">
+            <h2 class="review-title">Today's Answers</h2>
+            <div class="review-list" id="review-list"></div>
+            <button id="back-btn" class="btn-secondary">
+                ← Back to Results
+            </button>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-line"></div>
+            <p class="footer-text">A daily exercise in knowledge</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+

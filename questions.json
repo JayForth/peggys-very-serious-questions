@@ -1,0 +1,496 @@
+{
+    "questions": [
+        {
+            "question": "Which playwright wrote 'Waiting for Godot'?",
+            "answer": "Samuel Beckett",
+            "alternateAnswers": ["Beckett"]
+        },
+        {
+            "question": "What is the capital city of Portugal?",
+            "answer": "Lisbon",
+            "alternateAnswers": ["Lisboa"]
+        },
+        {
+            "question": "Which element has the chemical symbol 'Au'?",
+            "answer": "Gold",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who painted 'The Persistence of Memory', featuring the melting clocks?",
+            "answer": "Salvador Dalí",
+            "alternateAnswers": ["Salvador Dali", "Dali", "Dalí"]
+        },
+        {
+            "question": "In which year did the Berlin Wall fall?",
+            "answer": "1989",
+            "alternateAnswers": []
+        },
+        {
+            "question": "What is the largest organ in the human body?",
+            "answer": "Skin",
+            "alternateAnswers": ["The skin"]
+        },
+        {
+            "question": "Which novel begins with the line 'Call me Ishmael'?",
+            "answer": "Moby-Dick",
+            "alternateAnswers": ["Moby Dick", "Moby-Dick; or, The Whale"]
+        },
+        {
+            "question": "What is the name of the process by which plants convert sunlight into energy?",
+            "answer": "Photosynthesis",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Which composer wrote the 'Moonlight Sonata'?",
+            "answer": "Ludwig van Beethoven",
+            "alternateAnswers": ["Beethoven"]
+        },
+        {
+            "question": "What is the smallest country in the world by land area?",
+            "answer": "Vatican City",
+            "alternateAnswers": ["The Vatican", "Vatican"]
+        },
+        {
+            "question": "Who wrote the novel 'One Hundred Years of Solitude'?",
+            "answer": "Gabriel García Márquez",
+            "alternateAnswers": ["Gabriel Garcia Marquez", "García Márquez", "Garcia Marquez"]
+        },
+        {
+            "question": "What is the chemical formula for table salt?",
+            "answer": "NaCl",
+            "alternateAnswers": ["Sodium chloride"]
+        },
+        {
+            "question": "Which planet in our solar system has the most moons?",
+            "answer": "Saturn",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who directed the film 'Citizen Kane'?",
+            "answer": "Orson Welles",
+            "alternateAnswers": ["Welles"]
+        },
+        {
+            "question": "What is the capital of Iceland?",
+            "answer": "Reykjavik",
+            "alternateAnswers": ["Reykjavík"]
+        },
+        {
+            "question": "Which ancient wonder was located in Alexandria, Egypt?",
+            "answer": "The Lighthouse of Alexandria",
+            "alternateAnswers": ["Lighthouse of Alexandria", "Pharos of Alexandria", "The Pharos"]
+        },
+        {
+            "question": "Who wrote 'The Waste Land'?",
+            "answer": "T.S. Eliot",
+            "alternateAnswers": ["T. S. Eliot", "Thomas Stearns Eliot", "Eliot"]
+        },
+        {
+            "question": "What is the tallest mountain in Africa?",
+            "answer": "Mount Kilimanjaro",
+            "alternateAnswers": ["Kilimanjaro", "Mt. Kilimanjaro", "Mt Kilimanjaro"]
+        },
+        {
+            "question": "Which French king was known as the Sun King?",
+            "answer": "Louis XIV",
+            "alternateAnswers": ["Louis the Fourteenth", "Louis 14"]
+        },
+        {
+            "question": "What is the study of fungi called?",
+            "answer": "Mycology",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who sculpted 'The Thinker'?",
+            "answer": "Auguste Rodin",
+            "alternateAnswers": ["Rodin"]
+        },
+        {
+            "question": "What is the longest river in Europe?",
+            "answer": "Volga",
+            "alternateAnswers": ["The Volga", "Volga River"]
+        },
+        {
+            "question": "Which scientist proposed the theory of general relativity?",
+            "answer": "Albert Einstein",
+            "alternateAnswers": ["Einstein"]
+        },
+        {
+            "question": "In what year was the Magna Carta signed?",
+            "answer": "1215",
+            "alternateAnswers": []
+        },
+        {
+            "question": "What is the name of the Greek god of wine?",
+            "answer": "Dionysus",
+            "alternateAnswers": ["Bacchus"]
+        },
+        {
+            "question": "Which author wrote 'Pride and Prejudice'?",
+            "answer": "Jane Austen",
+            "alternateAnswers": ["Austen"]
+        },
+        {
+            "question": "What is the hardest natural substance on Earth?",
+            "answer": "Diamond",
+            "alternateAnswers": ["Diamonds"]
+        },
+        {
+            "question": "Who painted the ceiling of the Sistine Chapel?",
+            "answer": "Michelangelo",
+            "alternateAnswers": ["Michelangelo Buonarroti", "Michelangelo di Lodovico Buonarroti Simoni"]
+        },
+        {
+            "question": "What is the capital of New Zealand?",
+            "answer": "Wellington",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Which element is the most abundant in the Earth's atmosphere?",
+            "answer": "Nitrogen",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who composed 'The Four Seasons'?",
+            "answer": "Antonio Vivaldi",
+            "alternateAnswers": ["Vivaldi"]
+        },
+        {
+            "question": "What is the name of the world's largest coral reef system?",
+            "answer": "The Great Barrier Reef",
+            "alternateAnswers": ["Great Barrier Reef"]
+        },
+        {
+            "question": "Which author wrote 'The Brothers Karamazov'?",
+            "answer": "Fyodor Dostoevsky",
+            "alternateAnswers": ["Dostoevsky", "Dostoyevsky", "Fyodor Dostoyevsky"]
+        },
+        {
+            "question": "What is the atomic number of carbon?",
+            "answer": "6",
+            "alternateAnswers": ["Six"]
+        },
+        {
+            "question": "Who was the first woman to win a Nobel Prize?",
+            "answer": "Marie Curie",
+            "alternateAnswers": ["Curie", "Maria Sklodowska Curie"]
+        },
+        {
+            "question": "What strait separates Europe from Africa?",
+            "answer": "Strait of Gibraltar",
+            "alternateAnswers": ["Gibraltar", "The Strait of Gibraltar"]
+        },
+        {
+            "question": "Which Renaissance artist painted 'The Birth of Venus'?",
+            "answer": "Sandro Botticelli",
+            "alternateAnswers": ["Botticelli"]
+        },
+        {
+            "question": "What is the name of the ancient trade route connecting China to the Mediterranean?",
+            "answer": "The Silk Road",
+            "alternateAnswers": ["Silk Road", "Silk Route"]
+        },
+        {
+            "question": "Who wrote the philosophical work 'Thus Spoke Zarathustra'?",
+            "answer": "Friedrich Nietzsche",
+            "alternateAnswers": ["Nietzsche"]
+        },
+        {
+            "question": "What is the currency of Japan?",
+            "answer": "Yen",
+            "alternateAnswers": ["Japanese Yen", "The Yen"]
+        },
+        {
+            "question": "Which gas do plants absorb from the atmosphere during photosynthesis?",
+            "answer": "Carbon dioxide",
+            "alternateAnswers": ["CO2"]
+        },
+        {
+            "question": "Who wrote 'To Kill a Mockingbird'?",
+            "answer": "Harper Lee",
+            "alternateAnswers": ["Lee"]
+        },
+        {
+            "question": "What is the largest desert in the world?",
+            "answer": "Antarctica",
+            "alternateAnswers": ["Antarctic Desert", "The Antarctic"]
+        },
+        {
+            "question": "Which artist is famous for his drip painting technique?",
+            "answer": "Jackson Pollock",
+            "alternateAnswers": ["Pollock"]
+        },
+        {
+            "question": "What year did World War I begin?",
+            "answer": "1914",
+            "alternateAnswers": []
+        },
+        {
+            "question": "What is the name of the longest bone in the human body?",
+            "answer": "Femur",
+            "alternateAnswers": ["The femur", "Thigh bone"]
+        },
+        {
+            "question": "Who discovered penicillin?",
+            "answer": "Alexander Fleming",
+            "alternateAnswers": ["Fleming"]
+        },
+        {
+            "question": "What is the capital of Argentina?",
+            "answer": "Buenos Aires",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Which Shakespeare play features the characters Rosencrantz and Guildenstern?",
+            "answer": "Hamlet",
+            "alternateAnswers": []
+        },
+        {
+            "question": "What is the speed of light in a vacuum, in kilometers per second?",
+            "answer": "299,792",
+            "alternateAnswers": ["300000", "300,000", "299792"]
+        },
+        {
+            "question": "Who painted 'Starry Night'?",
+            "answer": "Vincent van Gogh",
+            "alternateAnswers": ["Van Gogh", "van Gogh"]
+        },
+        {
+            "question": "What is the largest lake in Africa?",
+            "answer": "Lake Victoria",
+            "alternateAnswers": ["Victoria"]
+        },
+        {
+            "question": "Who wrote 'Don Quixote'?",
+            "answer": "Miguel de Cervantes",
+            "alternateAnswers": ["Cervantes", "Miguel de Cervantes Saavedra"]
+        },
+        {
+            "question": "What is the primary ingredient in traditional Japanese miso soup?",
+            "answer": "Fermented soybean paste",
+            "alternateAnswers": ["Miso", "Soybean paste", "Miso paste"]
+        },
+        {
+            "question": "Which architect designed the Guggenheim Museum in New York?",
+            "answer": "Frank Lloyd Wright",
+            "alternateAnswers": ["Wright"]
+        },
+        {
+            "question": "What is the national flower of Japan?",
+            "answer": "Cherry blossom",
+            "alternateAnswers": ["Sakura", "Cherry blossoms", "Chrysanthemum"]
+        },
+        {
+            "question": "Who composed 'Swan Lake'?",
+            "answer": "Pyotr Ilyich Tchaikovsky",
+            "alternateAnswers": ["Tchaikovsky", "Tchaikovski", "Chaikovsky"]
+        },
+        {
+            "question": "What is the smallest prime number?",
+            "answer": "2",
+            "alternateAnswers": ["Two"]
+        },
+        {
+            "question": "Which city is home to the Uffizi Gallery?",
+            "answer": "Florence",
+            "alternateAnswers": ["Firenze"]
+        },
+        {
+            "question": "Who wrote 'The Great Gatsby'?",
+            "answer": "F. Scott Fitzgerald",
+            "alternateAnswers": ["Fitzgerald", "F Scott Fitzgerald", "Scott Fitzgerald"]
+        },
+        {
+            "question": "What is the chemical symbol for lead?",
+            "answer": "Pb",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Which empire was ruled by Montezuma II?",
+            "answer": "Aztec Empire",
+            "alternateAnswers": ["Aztec", "The Aztecs", "Aztecs"]
+        },
+        {
+            "question": "What is the name of the phenomenon where light bends as it passes through a medium?",
+            "answer": "Refraction",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who directed the film '2001: A Space Odyssey'?",
+            "answer": "Stanley Kubrick",
+            "alternateAnswers": ["Kubrick"]
+        },
+        {
+            "question": "What is the official language of Brazil?",
+            "answer": "Portuguese",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Which Greek philosopher was the teacher of Alexander the Great?",
+            "answer": "Aristotle",
+            "alternateAnswers": []
+        },
+        {
+            "question": "What is the name of the largest moon of Saturn?",
+            "answer": "Titan",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who wrote 'War and Peace'?",
+            "answer": "Leo Tolstoy",
+            "alternateAnswers": ["Tolstoy", "Lev Tolstoy"]
+        },
+        {
+            "question": "What is the capital of Vietnam?",
+            "answer": "Hanoi",
+            "alternateAnswers": ["Ha Noi"]
+        },
+        {
+            "question": "Which planet is known as the 'Red Planet'?",
+            "answer": "Mars",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who invented the printing press?",
+            "answer": "Johannes Gutenberg",
+            "alternateAnswers": ["Gutenberg"]
+        },
+        {
+            "question": "What is the name of the art movement founded by André Breton?",
+            "answer": "Surrealism",
+            "alternateAnswers": ["Surrealist"]
+        },
+        {
+            "question": "What year did the Titanic sink?",
+            "answer": "1912",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who wrote 'The Divine Comedy'?",
+            "answer": "Dante Alighieri",
+            "alternateAnswers": ["Dante"]
+        },
+        {
+            "question": "What is the SI unit of electrical resistance?",
+            "answer": "Ohm",
+            "alternateAnswers": ["Ohms"]
+        },
+        {
+            "question": "Which sea is bordered by Jordan, Israel, and the West Bank?",
+            "answer": "Dead Sea",
+            "alternateAnswers": ["The Dead Sea"]
+        },
+        {
+            "question": "Who composed the opera 'La Traviata'?",
+            "answer": "Giuseppe Verdi",
+            "alternateAnswers": ["Verdi"]
+        },
+        {
+            "question": "What is the term for a word that reads the same backward as forward?",
+            "answer": "Palindrome",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who painted 'Girl with a Pearl Earring'?",
+            "answer": "Johannes Vermeer",
+            "alternateAnswers": ["Vermeer", "Jan Vermeer"]
+        },
+        {
+            "question": "What is the capital of South Korea?",
+            "answer": "Seoul",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Which philosopher wrote 'The Republic'?",
+            "answer": "Plato",
+            "alternateAnswers": []
+        },
+        {
+            "question": "What is the name of the process by which a caterpillar becomes a butterfly?",
+            "answer": "Metamorphosis",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who wrote the play 'A Streetcar Named Desire'?",
+            "answer": "Tennessee Williams",
+            "alternateAnswers": ["Williams"]
+        },
+        {
+            "question": "What is the boiling point of water in degrees Celsius?",
+            "answer": "100",
+            "alternateAnswers": ["100 degrees", "One hundred"]
+        },
+        {
+            "question": "Which island nation is famous for lemurs?",
+            "answer": "Madagascar",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who developed the theory of evolution by natural selection alongside Darwin?",
+            "answer": "Alfred Russel Wallace",
+            "alternateAnswers": ["Wallace", "Alfred Wallace"]
+        },
+        {
+            "question": "What is the name of the famous clock tower in London?",
+            "answer": "Elizabeth Tower",
+            "alternateAnswers": ["Big Ben", "The Elizabeth Tower"]
+        },
+        {
+            "question": "Who wrote '1984'?",
+            "answer": "George Orwell",
+            "alternateAnswers": ["Orwell", "Eric Arthur Blair"]
+        },
+        {
+            "question": "What is the largest species of shark?",
+            "answer": "Whale shark",
+            "alternateAnswers": ["The whale shark"]
+        },
+        {
+            "question": "Which city hosted the first modern Olympic Games?",
+            "answer": "Athens",
+            "alternateAnswers": []
+        },
+        {
+            "question": "What is the name of the bone that protects the brain?",
+            "answer": "Skull",
+            "alternateAnswers": ["Cranium", "The skull"]
+        },
+        {
+            "question": "Who painted 'The Garden of Earthly Delights'?",
+            "answer": "Hieronymus Bosch",
+            "alternateAnswers": ["Bosch"]
+        },
+        {
+            "question": "What is the largest bay in the world by shoreline?",
+            "answer": "Hudson Bay",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Who wrote 'Brave New World'?",
+            "answer": "Aldous Huxley",
+            "alternateAnswers": ["Huxley"]
+        },
+        {
+            "question": "What is the chemical symbol for potassium?",
+            "answer": "K",
+            "alternateAnswers": []
+        },
+        {
+            "question": "Which composer was completely deaf when he wrote his Ninth Symphony?",
+            "answer": "Ludwig van Beethoven",
+            "alternateAnswers": ["Beethoven"]
+        },
+        {
+            "question": "What is the name of the imaginary line that runs around the middle of the Earth?",
+            "answer": "Equator",
+            "alternateAnswers": ["The equator"]
+        },
+        {
+            "question": "Who was the first president of the United States?",
+            "answer": "George Washington",
+            "alternateAnswers": ["Washington"]
+        }
+    ]
+}
+
+
