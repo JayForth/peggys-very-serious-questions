@@ -191,6 +191,85 @@ class PeggysQuiz {
     }
 
     /**
+     * Start emoji rain effect for basic mode
+     */
+    startEmojiRain() {
+        // Don't create duplicate containers
+        if (document.querySelector('.emoji-rain-container')) return;
+        
+        const emojis = ['💦', '🫦', '💗', '🔥', '❤️‍🔥', '🙈', '😘', '✌️', '💰', '💸'];
+        const container = document.createElement('div');
+        container.className = 'emoji-rain-container';
+        document.body.appendChild(container);
+        
+        // Create initial batch of emojis
+        for (let i = 0; i < 20; i++) {
+            this.createRainEmoji(container, emojis, i * 500);
+        }
+        
+        // Continuously spawn new emojis
+        this.emojiRainInterval = setInterval(() => {
+            this.createRainEmoji(container, emojis, 0);
+        }, 800);
+    }
+
+    /**
+     * Create a single falling emoji
+     */
+    createRainEmoji(container, emojis, delay) {
+        setTimeout(() => {
+            if (!document.querySelector('.emoji-rain-container')) return;
+            
+            const emoji = document.createElement('div');
+            emoji.className = 'emoji-rain';
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Randomly assign size and opacity at creation time (fixed for this emoji's lifetime)
+            const sizeVariant = Math.random();
+            let fontSize, opacity;
+            if (sizeVariant < 0.33) {
+                fontSize = '1rem';
+                opacity = 0.3;
+            } else if (sizeVariant < 0.66) {
+                fontSize = '1.5rem';
+                opacity = 0.5;
+            } else {
+                fontSize = '1.8rem';
+                opacity = 0.7;
+            }
+            
+            emoji.style.fontSize = fontSize;
+            emoji.style.setProperty('--emoji-opacity', opacity);
+            emoji.style.left = Math.random() * 100 + '%';
+            emoji.style.animationDuration = (Math.random() * 5 + 8) + 's';
+            
+            container.appendChild(emoji);
+            
+            // Remove emoji after animation completes
+            const duration = parseFloat(emoji.style.animationDuration) * 1000 + 1000;
+            setTimeout(() => {
+                if (emoji.parentNode) {
+                    emoji.remove();
+                }
+            }, duration);
+        }, delay);
+    }
+
+    /**
+     * Stop emoji rain effect
+     */
+    stopEmojiRain() {
+        if (this.emojiRainInterval) {
+            clearInterval(this.emojiRainInterval);
+            this.emojiRainInterval = null;
+        }
+        const container = document.querySelector('.emoji-rain-container');
+        if (container) {
+            container.remove();
+        }
+    }
+
+    /**
      * Switch between Classic and Basic mode
      */
     switchMode(mode) {
@@ -226,11 +305,14 @@ class PeggysQuiz {
                 sound.play().catch(e => console.log('Audio play failed:', e));
             }
             
+            // Start emoji rain
+            this.startEmojiRain();
+            
             // Update branding
             if (mascotImg) mascotImg.src = 'Peggy-basic.png';
             if (title) title.innerHTML = "Peggy's <span class='title-emoji'>💅</span>";
             if (subtitle) subtitle.textContent = 'Super Slay Questions';
-            if (footerText) footerText.textContent = "Five questions bestie, let's absolutely slay this! 💖✨";
+            if (footerText) footerText.textContent = "Five questions await you, biiiitch! 💁‍♀️";
             
             // Update start button text
             if (startBtn) {
@@ -263,6 +345,9 @@ class PeggysQuiz {
                 sound.pause();
                 sound.currentTime = 0;
             }
+            
+            // Stop emoji rain
+            this.stopEmojiRain();
             
             // Restore classic branding
             if (mascotImg) mascotImg.src = 'peggy.png';

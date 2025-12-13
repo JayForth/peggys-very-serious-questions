@@ -71,6 +71,7 @@ body {
     flex-direction: column;
     padding: var(--space-md);
     position: relative;
+    z-index: 1;
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -1528,6 +1529,43 @@ main.screen.active {
     background: linear-gradient(135deg, #FF1493, #FF69B4);
     border-color: transparent;
     color: white;
+}
+
+/* Emoji Rain for Basic Mode */
+.emoji-rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.emoji-rain {
+    position: absolute;
+    top: -50px;
+    animation: emojiRainFall linear forwards;
+    filter: blur(0.5px);
+    will-change: transform, opacity;
+}
+
+@keyframes emojiRainFall {
+    0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: var(--emoji-opacity, 0.6);
+    }
+    90% {
+        opacity: var(--emoji-opacity, 0.6);
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
 }
 
 
