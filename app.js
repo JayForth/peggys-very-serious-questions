@@ -228,7 +228,7 @@ class PeggysQuiz {
             
             // Update branding
             if (mascotImg) mascotImg.src = 'Peggy-basic.png';
-            if (title) title.innerHTML = "Peggy's 💅";
+            if (title) title.innerHTML = "Peggy's <span class='title-emoji'>💅</span>";
             if (subtitle) subtitle.textContent = 'Super Slay Questions';
             if (footerText) footerText.textContent = "Five questions bestie, let's absolutely slay this! 💖✨";
             
@@ -311,14 +311,14 @@ class PeggysQuiz {
         const funFactCard = document.querySelectorAll('.info-card.secondary')[0];
         if (funFactCard) {
             const title = funFactCard.querySelector('.info-card-title');
-            if (title) title.textContent = "A SLAY FACT 💅";
+            if (title) title.textContent = "A *CHEF KISS* FACT 👨‍🍳";
         }
         
         // Coat card
         const coatCard = document.querySelectorAll('.info-card.secondary')[1];
         if (coatCard) {
             const title = coatCard.querySelector('.info-card-title');
-            if (title) title.textContent = "DOES BECKY NEED A COAT HUN? 🧥";
+            if (title) title.textContent = "DOES LIL' B NEED A COAT? 🧥";
         }
         
         // Update results screen text
