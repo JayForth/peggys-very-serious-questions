@@ -14,6 +14,7 @@ class PeggysQuiz {
         this.startTime = null;
         this.endTime = null;
         this.stats = this.loadStats();
+        this.currentMode = localStorage.getItem('peggy-mode') || 'classic';
         
         this.funFacts = [
             "Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible.",
@@ -165,11 +166,245 @@ class PeggysQuiz {
         this.selectTodaysQuestions();
         this.bindEvents();
         this.setupKeyboardHandling();
+        this.setupModeToggle();
+        this.applyMode(this.currentMode, false); // Don't play sound on initial load
         this.updateDateDisplay();
         this.displayFunFact();
         this.checkWeather();
         this.checkPreviousAttempt();
         this.displayStats();
+    }
+
+    /**
+     * Setup mode toggle buttons
+     */
+    setupModeToggle() {
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        modeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.dataset.mode;
+                if (mode !== this.currentMode) {
+                    this.switchMode(mode);
+                }
+            });
+        });
+    }
+
+    /**
+     * Switch between Classic and Basic mode
+     */
+    switchMode(mode) {
+        this.currentMode = mode;
+        localStorage.setItem('peggy-mode', mode);
+        this.applyMode(mode, true);
+    }
+
+    /**
+     * Apply the selected mode
+     */
+    applyMode(mode, playSound = false) {
+        const root = document.documentElement;
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        const mascotImg = document.getElementById('mascot-image');
+        const title = document.getElementById('main-title');
+        const subtitle = document.getElementById('main-subtitle');
+        const footerText = document.querySelector('.footer-text');
+        const startBtn = document.getElementById('start-btn');
+        const sound = document.getElementById('mode-sound');
+        
+        // Update active button
+        modeButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mode === mode);
+        });
+        
+        if (mode === 'basic') {
+            root.classList.add('basic-mode');
+            
+            // Play sound effect
+            if (playSound && sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Audio play failed:', e));
+            }
+            
+            // Update branding
+            if (mascotImg) mascotImg.src = 'Peggy-basic.png';
+            if (title) title.innerHTML = "Peggy's 💅";
+            if (subtitle) subtitle.textContent = 'Super Slay Questions';
+            if (footerText) footerText.textContent = "Five questions bestie, let's absolutely slay this! 💖✨";
+            
+            // Update start button text
+            if (startBtn) {
+                if (this.gameComplete) {
+                    startBtn.querySelector('span').textContent = 'See Your Slay 👑';
+                } else {
+                    startBtn.querySelector('span').textContent = "Let's Go Bestie! 💅";
+                }
+            }
+            
+            // Update stats preview if game complete
+            if (this.gameComplete) {
+                const statsPreview = document.getElementById('stats-preview');
+                if (statsPreview && statsPreview.querySelector('.stats-text')) {
+                    statsPreview.querySelector('.stats-text').textContent = 
+                        `Already slayed today bestie! 💅 Score: ${this.score}/${this.todaysQuestions.length}`;
+                }
+            }
+            
+            // Update page title
+            document.title = "Peggy's Super Slay Questions 💅";
+            
+            // Update info card titles for basic mode
+            this.updateBasicModeText();
+        } else {
+            root.classList.remove('basic-mode');
+            
+            // Stop the music when switching to classic
+            if (sound) {
+                sound.pause();
+                sound.currentTime = 0;
+            }
+            
+            // Restore classic branding
+            if (mascotImg) mascotImg.src = 'peggy.png';
+            if (title) title.innerHTML = "Peggy's";
+            if (subtitle) subtitle.textContent = 'Very Serious Questions';
+            if (footerText) footerText.textContent = 'Five questions await you, dear reader.';
+            
+            // Update start button text
+            if (startBtn) {
+                if (this.gameComplete) {
+                    startBtn.querySelector('span').textContent = 'View Results';
+                } else {
+                    startBtn.querySelector('span').textContent = "Begin Today's Quiz";
+                }
+            }
+            
+            // Update stats preview if game complete
+            if (this.gameComplete) {
+                const statsPreview = document.getElementById('stats-preview');
+                if (statsPreview && statsPreview.querySelector('.stats-text')) {
+                    statsPreview.querySelector('.stats-text').textContent = 
+                        `You've already completed today's quiz. Score: ${this.score}/${this.todaysQuestions.length}`;
+                }
+            }
+            
+            // Update page title
+            document.title = "Peggy's Very Serious Questions";
+            
+            // Restore classic text
+            this.updateClassicModeText();
+        }
+    }
+
+    /**
+     * Update text elements for Basic mode
+     */
+    updateBasicModeText() {
+        // Update info card titles
+        const todayTitle = document.querySelector('.info-card.primary .info-card-title');
+        const funFactTitle = document.querySelector('.info-sections .info-card.secondary:first-of-type .info-card-title');
+        const coatTitle = document.querySelector('.info-sections .info-card.secondary:last-of-type .info-card-title');
+        
+        if (todayTitle) todayTitle.textContent = "TODAY'S TEA ☕";
+        
+        // Fun fact card
+        const funFactCard = document.querySelectorAll('.info-card.secondary')[0];
+        if (funFactCard) {
+            const title = funFactCard.querySelector('.info-card-title');
+            if (title) title.textContent = "A SLAY FACT 💅";
+        }
+        
+        // Coat card
+        const coatCard = document.querySelectorAll('.info-card.secondary')[1];
+        if (coatCard) {
+            const title = coatCard.querySelector('.info-card-title');
+            if (title) title.textContent = "DOES BECKY NEED A COAT HUN? 🧥";
+        }
+        
+        // Update results screen text
+        const resultsTitle = document.querySelector('.results-title');
+        if (resultsTitle) resultsTitle.textContent = 'Slay Complete! 💖';
+        
+        const resultsOrnament = document.querySelector('.results-ornament');
+        if (resultsOrnament) resultsOrnament.textContent = '👑';
+        
+        const returnMessage = document.querySelector('.return-message');
+        if (returnMessage) returnMessage.textContent = "Come back tomorrow hun, we're not done slaying! 💅✨";
+        
+        const reviewTitle = document.querySelector('.review-title');
+        if (reviewTitle) reviewTitle.textContent = "The Tea on Today's Answers ☕";
+        
+        const shareBtn = document.getElementById('share-btn');
+        if (shareBtn) shareBtn.textContent = 'Share Your Slay 💖';
+        
+        const reviewBtn = document.getElementById('review-btn');
+        if (reviewBtn) reviewBtn.textContent = '👀 Spill the Tea';
+        
+        const backBtn = document.getElementById('back-btn');
+        if (backBtn) backBtn.textContent = '← Back Bestie';
+        
+        const quitBtn = document.getElementById('quit-btn');
+        if (quitBtn) quitBtn.textContent = '← Exit Hun';
+        
+        const skipBtn = document.getElementById('skip-btn');
+        if (skipBtn) skipBtn.textContent = 'Pass 💨';
+        
+        const answerInput = document.getElementById('answer-input');
+        if (answerInput) answerInput.placeholder = 'Spill the tea bestie...';
+    }
+
+    /**
+     * Update text elements for Classic mode
+     */
+    updateClassicModeText() {
+        // Restore info card titles
+        const todayTitle = document.querySelector('.info-card.primary .info-card-title');
+        if (todayTitle) todayTitle.textContent = "TODAY'S EDITION";
+        
+        // Fun fact card
+        const funFactCard = document.querySelectorAll('.info-card.secondary')[0];
+        if (funFactCard) {
+            const title = funFactCard.querySelector('.info-card-title');
+            if (title) title.textContent = "A FUN FACT";
+        }
+        
+        // Coat card
+        const coatCard = document.querySelectorAll('.info-card.secondary')[1];
+        if (coatCard) {
+            const title = coatCard.querySelector('.info-card-title');
+            if (title) title.textContent = "DOES BECKY NEED A COAT?";
+        }
+        
+        // Restore results screen text
+        const resultsTitle = document.querySelector('.results-title');
+        if (resultsTitle) resultsTitle.textContent = 'Finis';
+        
+        const resultsOrnament = document.querySelector('.results-ornament');
+        if (resultsOrnament) resultsOrnament.textContent = '✦';
+        
+        const returnMessage = document.querySelector('.return-message');
+        if (returnMessage) returnMessage.textContent = 'Return tomorrow for a fresh set of inquiries.';
+        
+        const reviewTitle = document.querySelector('.review-title');
+        if (reviewTitle) reviewTitle.textContent = "Today's Answers";
+        
+        const shareBtn = document.getElementById('share-btn');
+        if (shareBtn) shareBtn.textContent = 'Share Your Score';
+        
+        const reviewBtn = document.getElementById('review-btn');
+        if (reviewBtn) reviewBtn.textContent = 'Review Answers';
+        
+        const backBtn = document.getElementById('back-btn');
+        if (backBtn) backBtn.textContent = '← Back to Results';
+        
+        const quitBtn = document.getElementById('quit-btn');
+        if (quitBtn) quitBtn.textContent = '← Exit';
+        
+        const skipBtn = document.getElementById('skip-btn');
+        if (skipBtn) skipBtn.textContent = 'Skip';
+        
+        const answerInput = document.getElementById('answer-input');
+        if (answerInput) answerInput.placeholder = 'Your answer...';
     }
 
     /**
@@ -452,11 +687,13 @@ class PeggysQuiz {
             this.displayStats();
             
             const statsPreview = document.getElementById('stats-preview');
-            statsPreview.querySelector('.stats-text').textContent = 
-                `You've already completed today's quiz. Score: ${this.score}/${this.todaysQuestions.length}`;
+            statsPreview.querySelector('.stats-text').textContent = this.currentMode === 'basic'
+                ? `Already slayed today bestie! 💅 Score: ${this.score}/${this.todaysQuestions.length}`
+                : `You've already completed today's quiz. Score: ${this.score}/${this.todaysQuestions.length}`;
             
-            document.getElementById('start-btn').querySelector('span').textContent = 
-                'View Results';
+            document.getElementById('start-btn').querySelector('span').textContent = this.currentMode === 'basic'
+                ? 'See Your Slay 👑'
+                : 'View Results';
         } else {
             this.displayStats();
         }
@@ -577,8 +814,9 @@ class PeggysQuiz {
         const skipBtn = document.getElementById('skip-btn');
         submitBtn.disabled = false;
         skipBtn.disabled = false;
+        skipBtn.textContent = this.currentMode === 'basic' ? 'Pass 💨' : 'Skip';
         submitBtn.classList.remove('next-mode');
-        submitBtn.querySelector('.btn-text').textContent = 'Submit';
+        submitBtn.querySelector('.btn-text').textContent = this.currentMode === 'basic' ? 'Slay! 💖' : 'Submit';
         
         const feedback = document.getElementById('feedback');
         feedback.classList.remove('visible', 'correct', 'incorrect');
@@ -606,7 +844,7 @@ class PeggysQuiz {
         document.getElementById('skip-btn').disabled = true;
         submitBtn.disabled = false; // Re-enable for next action
         submitBtn.classList.add('next-mode');
-        submitBtn.querySelector('.btn-text').textContent = 'Next Question';
+        submitBtn.querySelector('.btn-text').textContent = this.currentMode === 'basic' ? 'Next Bestie! 💅' : 'Next Question';
     }
 
     submitAnswer() {
@@ -667,7 +905,7 @@ class PeggysQuiz {
         document.getElementById('skip-btn').disabled = true;
         submitBtn.disabled = false; // Re-enable for next action
         submitBtn.classList.add('next-mode');
-        submitBtn.querySelector('.btn-text').textContent = 'Next Question';
+        submitBtn.querySelector('.btn-text').textContent = this.currentMode === 'basic' ? 'Next Bestie! 💅' : 'Next Question';
     }
 
     /**
@@ -765,8 +1003,17 @@ class PeggysQuiz {
         }
         
         if (isCorrect) {
-            feedbackIcon.textContent = '✓';
-            const responses = [
+            feedbackIcon.textContent = this.currentMode === 'basic' ? '💖' : '✓';
+            const responses = this.currentMode === 'basic' ? [
+                'YAAAS QUEEN! 👑',
+                'SLAY BESTIE! 💅',
+                'Absolutely iconic! ✨',
+                'Mother is mothering! 🔥',
+                'You ate that up! 😍',
+                'Period! 💖',
+                'Living for this! 🦋',
+                'The serve is serving! ✨'
+            ] : [
                 'Precisely so.',
                 'Quite right.',
                 'Indeed.',
@@ -778,8 +1025,15 @@ class PeggysQuiz {
             feedbackText.textContent = responses[Math.floor(Math.random() * responses.length)];
             correctAnswerEl.textContent = '';
         } else {
-            feedbackIcon.textContent = '✗';
-            const responses = [
+            feedbackIcon.textContent = this.currentMode === 'basic' ? '😭' : '✗';
+            const responses = this.currentMode === 'basic' ? [
+                "Not it hun! 😬",
+                "That ain't it bestie! 💔",
+                "Oop- not quite! 🙈",
+                "We'll pretend we didn't see that! 👀",
+                "Main character moment... failed! 😩",
+                "The flop era! 💀"
+            ] : [
                 'Not quite.',
                 'Alas, no.',
                 'Unfortunately not.',
@@ -787,7 +1041,9 @@ class PeggysQuiz {
                 'Close, but no.'
             ];
             feedbackText.textContent = responses[Math.floor(Math.random() * responses.length)];
-            correctAnswerEl.textContent = `The answer was: ${correctAnswer}`;
+            correctAnswerEl.textContent = this.currentMode === 'basic' 
+                ? `The tea was: ${correctAnswer} ☕` 
+                : `The answer was: ${correctAnswer}`;
         }
         
         // On mobile, ensure submit/next button stays visible after feedback appears
@@ -843,6 +1099,13 @@ class PeggysQuiz {
     showResults() {
         this.showScreen('results-screen');
         
+        // Apply mode-specific text to results screen
+        if (this.currentMode === 'basic') {
+            this.updateBasicModeText();
+        } else {
+            this.updateClassicModeText();
+        }
+        
         // Update score
         document.getElementById('final-score').textContent = this.score;
         
@@ -861,7 +1124,7 @@ class PeggysQuiz {
         
         // Update message
         const totalQuestions = this.todaysQuestions.length;
-        const messages = {
+        const classicMessages = {
             0: 'Perhaps the questions were too serious today.',
             1: 'A humble beginning. Tomorrow awaits.',
             2: 'Two correct! The journey continues.',
@@ -869,7 +1132,18 @@ class PeggysQuiz {
             4: 'Nearly there! Not too shabby.',
             5: 'Flawless! You are clearly very serious about questions.'
         };
-        const message = messages[this.score] || `You got ${this.score} out of ${totalQuestions} correct.`;
+        const basicMessages = {
+            0: "Bestie... we need to talk 😭💔 Main character origin story tho!",
+            1: "One slay is still a slay hun! 💅 You're warming up!",
+            2: "Two correct! The glow up is coming bestie! ✨",
+            3: "Okaaay we see you! Serving mid but make it fashion! 💖",
+            4: "So close to eating this UP! You're literally ICONIC! 👑",
+            5: "MOTHER ATE AND LEFT NO CRUMBS!!! 💅👑✨ SLAY QUEEN!"
+        };
+        const messages = this.currentMode === 'basic' ? basicMessages : classicMessages;
+        const message = messages[this.score] || (this.currentMode === 'basic' 
+            ? `You got ${this.score} out of ${totalQuestions} hun! Keep slaying! 💖`
+            : `You got ${this.score} out of ${totalQuestions} correct.`);
         document.getElementById('results-message').textContent = message;
         
         // Add time taken if available
@@ -910,7 +1184,9 @@ class PeggysQuiz {
 
     showConfetti() {
         const confettiCount = 50;
-        const confettiColors = ['#8B3A3A', '#3A5F4A', '#9A8B6F', '#1C1C1C'];
+        const confettiColors = this.currentMode === 'basic' 
+            ? ['#FF1493', '#FF69B4', '#FFD700', '#00CED1', '#FF69B4', '#FFB6C1']
+            : ['#8B3A3A', '#3A5F4A', '#9A8B6F', '#1C1C1C'];
         const confettiContainer = document.createElement('div');
         confettiContainer.className = 'confetti-container';
         document.body.appendChild(confettiContainer);
@@ -973,15 +1249,28 @@ class PeggysQuiz {
         const totalQuestions = this.todaysQuestions.length;
         const percentage = Math.round((this.score / totalQuestions) * 100);
         
-        const squares = this.answers.map(a => a.isCorrect ? '🟩' : '⬜').join('');
-        const emoji = this.score === totalQuestions ? '🎉' : this.score >= totalQuestions * 0.8 ? '✨' : this.score >= totalQuestions * 0.6 ? '👍' : '📚';
+        const squares = this.currentMode === 'basic' 
+            ? this.answers.map(a => a.isCorrect ? '💖' : '💔').join('')
+            : this.answers.map(a => a.isCorrect ? '🟩' : '⬜').join('');
         
-        const shareText = `${emoji} Peggy's Very Serious Questions
+        const emoji = this.currentMode === 'basic'
+            ? (this.score === totalQuestions ? '👑' : this.score >= totalQuestions * 0.8 ? '💅' : this.score >= totalQuestions * 0.6 ? '✨' : '🦋')
+            : (this.score === totalQuestions ? '🎉' : this.score >= totalQuestions * 0.8 ? '✨' : this.score >= totalQuestions * 0.6 ? '👍' : '📚');
+        
+        const gameName = this.currentMode === 'basic' 
+            ? "Peggy's Super Slay Questions 💅" 
+            : "Peggy's Very Serious Questions";
+        
+        const streakText = this.currentMode === 'basic'
+            ? (this.stats.currentStreak > 1 ? `${this.stats.currentStreak} day slay streak 🔥\n\n` : '')
+            : (this.stats.currentStreak > 1 ? `${this.stats.currentStreak} day streak\n\n` : '');
+        
+        const shareText = `${emoji} ${gameName}
 ${dateStr} — ${this.score}/${totalQuestions} (${percentage}%)
 
 ${squares}
 
-${this.stats.currentStreak > 1 ? `${this.stats.currentStreak} day streak\n\n` : ''}Play at: ${window.location.href}`;
+${streakText}Play at: ${window.location.href}`;
         
         if (navigator.share) {
             navigator.share({

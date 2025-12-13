@@ -1111,7 +1111,7 @@ main.screen.active {
 
 /* Dark mode support - refined */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not(.basic-mode) {
         --cream: #18171A;
         --cream-dark: #222124;
         --ink: #E8E4DC;
@@ -1123,6 +1123,403 @@ main.screen.active {
         --gold: #B8A882;
         --line-color: #3A3834;
     }
+}
+
+/* ===================================
+   Mode Toggle
+   =================================== */
+.mode-toggle {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.mode-btn {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    padding: var(--space-xs) var(--space-md);
+    background: transparent;
+    color: var(--ink-muted);
+    border: 1px solid var(--line-color);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    letter-spacing: 0.05em;
+}
+
+.mode-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+}
+
+.mode-btn.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+}
+
+/* ===================================
+   BASIC MODE - Hyperpop Girlboss Aesthetic
+   =================================== */
+:root.basic-mode {
+    /* Hot pink gradient color scheme */
+    --cream: #FFF0F5;
+    --cream-dark: #FFE4EC;
+    --ink: #FF1493;
+    --ink-light: #FF69B4;
+    --ink-faded: #DB7093;
+    --ink-muted: #FFB6C1;
+    --accent-red: #FF1493;
+    --accent-green: #00CED1;
+    --gold: #FFD700;
+    --line-color: #FFB6C1;
+    
+    /* Fun fonts for basic mode */
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Source Serif 4', Georgia, serif;
+}
+
+.basic-mode body {
+    background: linear-gradient(135deg, #FFF0F5 0%, #FFE4EC 25%, #FFDDF4 50%, #E8F4FF 75%, #F0FFF0 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Basic mode header styling */
+.basic-mode .header {
+    position: relative;
+}
+
+.basic-mode .title {
+    background: linear-gradient(90deg, #FF1493, #FF69B4, #FFD700, #00CED1, #FF1493);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmerText 3s linear infinite;
+}
+
+@keyframes shimmerText {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+.basic-mode .subtitle {
+    color: #FF69B4;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.basic-mode .header-line {
+    background: linear-gradient(90deg, #FF1493, #FFD700, #00CED1);
+    height: 3px;
+}
+
+/* Basic mode mascot glow */
+.basic-mode .mascot-img {
+    filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.5));
+    animation: mascotBounce 2s ease-in-out infinite;
+}
+
+@keyframes mascotBounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-5px) rotate(-3deg); }
+    75% { transform: translateY(-5px) rotate(3deg); }
+}
+
+/* Basic mode cards */
+.basic-mode .info-card {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    margin: var(--space-sm) 0;
+    border: 2px solid #FFB6C1;
+    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.15);
+}
+
+.basic-mode .info-card::before {
+    content: '💖';
+    background: transparent;
+    font-size: 1rem;
+}
+
+.basic-mode .info-card-title {
+    color: #FF1493 !important;
+}
+
+/* Basic mode buttons */
+.basic-mode .btn-primary {
+    background: linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FFD700 100%);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    box-shadow: 0 4px 20px rgba(255, 20, 147, 0.4);
+    animation: buttonPulseBasic 2s ease-in-out infinite;
+}
+
+@keyframes buttonPulseBasic {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255, 20, 147, 0.4); }
+    50% { box-shadow: 0 6px 30px rgba(255, 20, 147, 0.6); }
+}
+
+.basic-mode .btn-primary:hover {
+    background: linear-gradient(135deg, #FFD700 0%, #FF69B4 50%, #FF1493 100%);
+    color: white;
+    transform: scale(1.05);
+}
+
+.basic-mode .btn-secondary {
+    border-radius: 50px;
+    border-color: #FF69B4;
+    color: #FF1493;
+}
+
+.basic-mode .btn-secondary:hover {
+    background: #FF69B4;
+    color: white;
+}
+
+/* Basic mode question card */
+.basic-mode .question-card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 3px solid #FFB6C1;
+    border-radius: 25px;
+    box-shadow: 0 8px 30px rgba(255, 20, 147, 0.2);
+}
+
+.basic-mode .question-card::before {
+    background: linear-gradient(90deg, #FF1493, #FFD700, #00CED1);
+    height: 4px;
+    border-radius: 2px;
+}
+
+.basic-mode .question-number {
+    color: #FF69B4;
+    font-size: 2rem;
+}
+
+.basic-mode .question-text {
+    color: #FF1493;
+}
+
+/* Basic mode input */
+.basic-mode .answer-input {
+    border-bottom: 3px solid #FFB6C1;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px 10px 0 0;
+    padding: var(--space-md);
+}
+
+.basic-mode .answer-input:focus {
+    border-color: #FF1493;
+    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.2);
+}
+
+.basic-mode .answer-input::placeholder {
+    color: #FFB6C1;
+}
+
+/* Basic mode submit/skip buttons */
+.basic-mode .btn-submit {
+    background: linear-gradient(135deg, #FF1493, #FF69B4);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: 600;
+}
+
+.basic-mode .btn-submit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #FF69B4, #FFD700);
+    color: white;
+}
+
+.basic-mode .btn-skip {
+    border-radius: 25px;
+    border-color: #FFB6C1;
+    color: #FF69B4;
+}
+
+/* Basic mode progress bar */
+.basic-mode .progress-bar {
+    height: 8px;
+    background: #FFE4EC;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.basic-mode .progress-fill {
+    background: linear-gradient(90deg, #FF1493, #FFD700, #00CED1);
+    border-radius: 10px;
+}
+
+/* Basic mode feedback */
+.basic-mode .feedback {
+    border-radius: 15px;
+    border-left: 5px solid;
+}
+
+.basic-mode .feedback.correct {
+    border-color: #00CED1;
+    background: rgba(0, 206, 209, 0.15);
+}
+
+.basic-mode .feedback.incorrect {
+    border-color: #FF1493;
+    background: rgba(255, 20, 147, 0.1);
+}
+
+/* Basic mode results */
+.basic-mode .results-ornament {
+    font-size: 3rem;
+    animation: sparkle 1s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.2) rotate(10deg); opacity: 0.8; }
+}
+
+.basic-mode .results-title {
+    background: linear-gradient(90deg, #FF1493, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.basic-mode .score-display {
+    color: #FF1493;
+}
+
+.basic-mode .result-dot.correct {
+    background: linear-gradient(135deg, #00CED1, #40E0D0);
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 206, 209, 0.5);
+}
+
+.basic-mode .result-dot.incorrect {
+    border-color: #FFB6C1;
+}
+
+/* Basic mode category breakdown */
+.basic-mode .category-breakdown {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    border: 2px solid #FFB6C1;
+}
+
+/* Basic mode share button */
+.basic-mode .btn-share {
+    background: linear-gradient(135deg, #FF1493, #FF69B4, #FFD700);
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.basic-mode .btn-share:hover {
+    background: linear-gradient(135deg, #FFD700, #FF69B4, #FF1493);
+}
+
+/* Basic mode footer */
+.basic-mode .footer-line {
+    background: linear-gradient(90deg, #FF1493, #FFD700, #00CED1);
+    height: 3px;
+}
+
+.basic-mode .footer-text {
+    color: #FF69B4;
+    font-style: normal;
+}
+
+/* Basic mode stats */
+.basic-mode .stat-value {
+    color: #FF1493;
+}
+
+.basic-mode .streak-value {
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Basic mode coat verdict */
+.basic-mode .coat-verdict.yes {
+    color: #FF1493;
+}
+
+.basic-mode .coat-verdict.no {
+    color: #00CED1;
+}
+
+/* Basic mode review screen */
+.basic-mode .review-item {
+    background: rgba(255, 255, 255, 0.7);
+    margin: var(--space-sm) 0;
+    border-radius: 15px;
+    border: 2px solid #FFE4EC;
+}
+
+.basic-mode .review-answer-link {
+    color: #FF1493;
+    border-bottom-color: #FF1493;
+}
+
+/* Basic mode quit button */
+.basic-mode .btn-quit {
+    color: #FF69B4;
+}
+
+.basic-mode .btn-quit:hover {
+    color: #FF1493;
+}
+
+/* Basic mode question counter */
+.basic-mode .question-counter {
+    color: #FF69B4;
+}
+
+/* Basic mode confetti colors */
+.basic-mode .confetti {
+    background: linear-gradient(45deg, #FF1493, #FFD700, #00CED1, #FF69B4);
+}
+
+/* Sparkle decorations for basic mode */
+.basic-mode .header::after {
+    content: '✨💅🌸💖🦋';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    animation: floatEmoji 3s ease-in-out infinite;
+}
+
+@keyframes floatEmoji {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Basic mode toggle button styling */
+.basic-mode .mode-btn {
+    border-color: #FFB6C1;
+    color: #FF69B4;
+}
+
+.basic-mode .mode-btn:hover {
+    border-color: #FF1493;
+    color: #FF1493;
+}
+
+.basic-mode .mode-btn.active {
+    background: linear-gradient(135deg, #FF1493, #FF69B4);
+    border-color: transparent;
+    color: white;
 }
 
 

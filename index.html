@@ -13,15 +13,24 @@
     <div class="app-container">
         <!-- Header -->
         <header class="header">
+            <div class="mode-toggle">
+                <button class="mode-btn active" data-mode="classic">Classic ✨</button>
+                <button class="mode-btn" data-mode="basic">Basic 💅</button>
+            </div>
             <a href="#" class="header-home-link" id="home-link">
                 <div class="header-mascot">
-                    <img src="peggy.png" alt="Peggy the terrier" class="mascot-img">
+                    <img src="peggy.png" alt="Peggy the terrier" class="mascot-img" id="mascot-image">
                 </div>
                 <div class="header-line"></div>
-                <h1 class="title">Peggy&#8217;s</h1>
-                <p class="subtitle">Very Serious Questions</p>
+                <h1 class="title" id="main-title">Peggy&#8217;s</h1>
+                <p class="subtitle" id="main-subtitle">Very Serious Questions</p>
             </a>
         </header>
+        
+        <!-- Audio for mode switch -->
+        <audio id="mode-sound" preload="auto">
+            <source src="Warning-Cut.mp3" type="audio/mpeg">
+        </audio>
 
         <!-- Start Screen -->
         <main id="start-screen" class="screen active">
