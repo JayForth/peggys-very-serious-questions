@@ -34,6 +34,27 @@
     --transition-slow: 500ms ease;
 }
 
+/* Low Questions Warning Banner */
+.low-questions-banner {
+    background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+    color: white;
+    text-align: center;
+    padding: 12px 20px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.low-questions-banner + .app-container {
+    padding-top: calc(var(--space-md) + 50px);
+}
+
 /* Reset & Base */
 *, *::before, *::after {
     box-sizing: border-box;

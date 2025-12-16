@@ -173,6 +173,28 @@ class PeggysQuiz {
         this.checkWeather();
         this.checkPreviousAttempt();
         this.displayStats();
+        this.checkLowQuestions();
+    }
+
+    /**
+     * Check if questions are running low and show warning banner
+     */
+    checkLowQuestions() {
+        const usedIndices = this.getUsedQuestionIndices();
+        const totalQuestions = this.questions.length;
+        const remainingQuestions = totalQuestions - usedIndices.size;
+        const warningThreshold = 25; // 5 days worth of questions
+        
+        const banner = document.getElementById('low-questions-banner');
+        const remainingSpan = document.getElementById('questions-remaining');
+        
+        if (banner && remainingQuestions <= warningThreshold) {
+            remainingSpan.textContent = remainingQuestions;
+            banner.style.display = 'block';
+            
+            // Add padding to app container when banner is shown
+            document.querySelector('.app-container').style.paddingTop = 'calc(1rem + 50px)';
+        }
     }
 
     /**
@@ -541,23 +563,126 @@ class PeggysQuiz {
     /**
      * Select 5 questions for today based on the date
      * Uses a seeded random to ensure everyone gets the same questions each day
+     * Tracks used questions to prevent repeats
      */
     selectTodaysQuestions() {
         const today = new Date();
+        const todayKey = this.getTodayKey();
         const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
         const seed = this.hashCode(dateString);
         
-        // Create a seeded shuffle
-        const shuffled = [...this.questions];
-        let currentSeed = seed;
-        
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            currentSeed = (currentSeed * 1103515245 + 12345) & 0x7fffffff;
-            const j = currentSeed % (i + 1);
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        // Check if we already selected questions for today
+        const cachedSelection = localStorage.getItem(`peggy-questions-${todayKey}`);
+        if (cachedSelection) {
+            const cachedIndices = JSON.parse(cachedSelection);
+            this.todaysQuestions = cachedIndices.map(i => this.questions[i]).filter(q => q);
+            if (this.todaysQuestions.length === 5) {
+                return;
+            }
         }
         
-        this.todaysQuestions = shuffled.slice(0, 5);
+        // Get used question indices (last 30 days worth to prevent repeats)
+        const usedIndices = this.getUsedQuestionIndices();
+        
+        // Create pool of available questions (excluding recently used)
+        let availableIndices = [];
+        for (let i = 0; i < this.questions.length; i++) {
+            if (!usedIndices.has(i)) {
+                availableIndices.push(i);
+            }
+        }
+        
+        // If we've used too many questions, reset the pool but keep last 2 days
+        if (availableIndices.length < 5) {
+            console.log('Resetting question pool - used most questions');
+            this.resetUsedQuestions(2); // Keep only last 2 days
+            availableIndices = [];
+            const recentUsed = this.getUsedQuestionIndices();
+            for (let i = 0; i < this.questions.length; i++) {
+                if (!recentUsed.has(i)) {
+                    availableIndices.push(i);
+                }
+            }
+        }
+        
+        // Seeded shuffle of available indices
+        let currentSeed = seed;
+        for (let i = availableIndices.length - 1; i > 0; i--) {
+            currentSeed = (currentSeed * 1103515245 + 12345) & 0x7fffffff;
+            const j = currentSeed % (i + 1);
+            [availableIndices[i], availableIndices[j]] = [availableIndices[j], availableIndices[i]];
+        }
+        
+        // Select first 5 from shuffled available questions
+        const selectedIndices = availableIndices.slice(0, 5);
+        this.todaysQuestions = selectedIndices.map(i => this.questions[i]);
+        
+        // Save today's selection
+        localStorage.setItem(`peggy-questions-${todayKey}`, JSON.stringify(selectedIndices));
+        
+        // Record these questions as used
+        this.recordUsedQuestions(selectedIndices);
+    }
+
+    /**
+     * Get set of question indices used in recent days
+     */
+    getUsedQuestionIndices() {
+        const used = new Set();
+        const usedData = localStorage.getItem('peggy-used-questions');
+        if (usedData) {
+            const usedByDay = JSON.parse(usedData);
+            Object.values(usedByDay).forEach(indices => {
+                indices.forEach(i => used.add(i));
+            });
+        }
+        return used;
+    }
+
+    /**
+     * Record question indices as used for today
+     */
+    recordUsedQuestions(indices) {
+        const todayKey = this.getTodayKey();
+        let usedByDay = {};
+        const usedData = localStorage.getItem('peggy-used-questions');
+        if (usedData) {
+            usedByDay = JSON.parse(usedData);
+        }
+        
+        usedByDay[todayKey] = indices;
+        
+        // Clean up old entries (keep last 60 days max)
+        const keys = Object.keys(usedByDay).sort();
+        while (keys.length > 60) {
+            delete usedByDay[keys.shift()];
+        }
+        
+        localStorage.setItem('peggy-used-questions', JSON.stringify(usedByDay));
+    }
+
+    /**
+     * Reset used questions, optionally keeping last N days
+     */
+    resetUsedQuestions(keepDays = 0) {
+        if (keepDays === 0) {
+            localStorage.removeItem('peggy-used-questions');
+            return;
+        }
+        
+        const usedData = localStorage.getItem('peggy-used-questions');
+        if (!usedData) return;
+        
+        const usedByDay = JSON.parse(usedData);
+        const keys = Object.keys(usedByDay).sort();
+        const keysToKeep = keys.slice(-keepDays);
+        
+        const newUsedByDay = {};
+        keysToKeep.forEach(key => {
+            newUsedByDay[key] = usedByDay[key];
+        });
+        
+        localStorage.setItem('peggy-used-questions', JSON.stringify(newUsedByDay));
     }
 
     hashCode(str) {
