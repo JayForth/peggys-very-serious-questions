@@ -15,6 +15,7 @@ class PeggysQuiz {
         this.endTime = null;
         this.stats = this.loadStats();
         this.currentMode = localStorage.getItem('peggy-mode') || 'classic';
+        this.isMuted = localStorage.getItem('peggy-muted') === 'true';
         
         this.funFacts = [
             "Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible.",
@@ -210,6 +211,55 @@ class PeggysQuiz {
                 }
             });
         });
+        
+        // Setup mute button
+        const muteBtn = document.getElementById('mute-btn');
+        if (muteBtn) {
+            muteBtn.addEventListener('click', () => this.toggleMute());
+            this.updateMuteButton();
+        }
+    }
+
+    /**
+     * Toggle mute state
+     */
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        localStorage.setItem('peggy-muted', this.isMuted);
+        this.updateMuteButton();
+        
+        const sound = document.getElementById('mode-sound');
+        if (sound) {
+            if (this.isMuted) {
+                // Stop audio when muting
+                sound.pause();
+                sound.currentTime = 0;
+            } else {
+                // Play audio when unmuting (if in basic mode)
+                if (this.currentMode === 'basic') {
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.log('Audio play failed:', e));
+                }
+            }
+        }
+    }
+
+    /**
+     * Update mute button appearance
+     */
+    updateMuteButton() {
+        const muteBtn = document.getElementById('mute-btn');
+        const muteIcon = document.getElementById('mute-icon');
+        
+        if (muteBtn && muteIcon) {
+            if (this.isMuted) {
+                muteBtn.classList.add('muted');
+                muteIcon.textContent = '🔇';
+            } else {
+                muteBtn.classList.remove('muted');
+                muteIcon.textContent = '🔊';
+            }
+        }
     }
 
     /**
@@ -318,11 +368,20 @@ class PeggysQuiz {
             btn.classList.toggle('active', btn.dataset.mode === mode);
         });
         
+        // Show/hide mute button based on mode
+        const muteBtn = document.getElementById('mute-btn');
+        
         if (mode === 'basic') {
             root.classList.add('basic-mode');
             
-            // Play sound effect
-            if (playSound && sound) {
+            // Show mute button
+            if (muteBtn) {
+                muteBtn.style.display = 'flex';
+                this.updateMuteButton();
+            }
+            
+            // Play sound effect (if not muted)
+            if (playSound && sound && !this.isMuted) {
                 sound.currentTime = 0;
                 sound.play().catch(e => console.log('Audio play failed:', e));
             }
@@ -361,6 +420,11 @@ class PeggysQuiz {
             this.updateBasicModeText();
         } else {
             root.classList.remove('basic-mode');
+            
+            // Hide mute button
+            if (muteBtn) {
+                muteBtn.style.display = 'none';
+            }
             
             // Stop the music when switching to classic
             if (sound) {
