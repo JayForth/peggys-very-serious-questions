@@ -471,27 +471,6 @@ class PeggysQuiz {
      * Update text elements for Basic mode
      */
     updateBasicModeText() {
-        // Update info card titles
-        const todayTitle = document.querySelector('.info-card.primary .info-card-title');
-        const funFactTitle = document.querySelector('.info-sections .info-card.secondary:first-of-type .info-card-title');
-        const coatTitle = document.querySelector('.info-sections .info-card.secondary:last-of-type .info-card-title');
-        
-        if (todayTitle) todayTitle.textContent = "TODAY'S TEA ☕";
-        
-        // Fun fact card
-        const funFactCard = document.querySelectorAll('.info-card.secondary')[0];
-        if (funFactCard) {
-            const title = funFactCard.querySelector('.info-card-title');
-            if (title) title.textContent = "A *CHEF KISS* FACT 👨‍🍳";
-        }
-        
-        // Coat card
-        const coatCard = document.querySelectorAll('.info-card.secondary')[1];
-        if (coatCard) {
-            const title = coatCard.querySelector('.info-card-title');
-            if (title) title.textContent = "DOES LIL' B NEED A COAT? 🧥";
-        }
-        
         // Update results screen text
         const resultsTitle = document.querySelector('.results-title');
         if (resultsTitle) resultsTitle.textContent = 'Slay Complete! 💖';
@@ -528,24 +507,6 @@ class PeggysQuiz {
      * Update text elements for Classic mode
      */
     updateClassicModeText() {
-        // Restore info card titles
-        const todayTitle = document.querySelector('.info-card.primary .info-card-title');
-        if (todayTitle) todayTitle.textContent = "TODAY'S EDITION";
-        
-        // Fun fact card
-        const funFactCard = document.querySelectorAll('.info-card.secondary')[0];
-        if (funFactCard) {
-            const title = funFactCard.querySelector('.info-card-title');
-            if (title) title.textContent = "A FUN FACT";
-        }
-        
-        // Coat card
-        const coatCard = document.querySelectorAll('.info-card.secondary')[1];
-        if (coatCard) {
-            const title = coatCard.querySelector('.info-card-title');
-            if (title) title.textContent = "DOES BECKY NEED A COAT?";
-        }
-        
         // Restore results screen text
         const resultsTitle = document.querySelector('.results-title');
         if (resultsTitle) resultsTitle.textContent = 'Finis';
@@ -840,8 +801,7 @@ class PeggysQuiz {
     }
 
     async checkWeather() {
-        const verdictEl = document.getElementById('coat-verdict');
-        const detailsEl = document.getElementById('weather-details');
+        const weatherBushEl = document.getElementById('weather-bush');
         
         try {
             // Sheffield, UK coordinates
@@ -872,25 +832,16 @@ class PeggysQuiz {
             
             const needsCoat = isCold || isRaining || isWindy;
             
-            // Build verdict
-            verdictEl.textContent = needsCoat ? 'Yes!' : 'No!';
-            verdictEl.classList.remove('yes', 'no');
-            verdictEl.classList.add(needsCoat ? 'yes' : 'no');
-            
-            // Build details
-            let details = `${Math.round(temp)}°C`;
-            if (isRaining) details += ', rainy';
-            if (isWindy) details += ', windy';
-            if (!isRaining && !isWindy && !isCold) details += ', lovely';
-            details += ' in Sheffield';
-            
-            detailsEl.textContent = details;
+            // Build weather bush message
+            if (needsCoat) {
+                weatherBushEl.textContent = "The weather bush says: wear a coat.";
+            } else {
+                weatherBushEl.textContent = "The weather bush says: !oohoo! You don't need a coat today!";
+            }
             
         } catch (error) {
             console.error('Weather error:', error);
-            verdictEl.textContent = 'Maybe?';
-            verdictEl.classList.remove('yes', 'no');
-            detailsEl.textContent = "Couldn't check Sheffield weather";
+            weatherBushEl.textContent = "The weather bush is unsure today...";
         }
     }
 

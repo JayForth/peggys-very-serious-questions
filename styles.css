@@ -134,9 +134,9 @@ body {
 }
 
 .title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-display);
     font-size: 2.2rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.01em;
     line-height: 1;
     margin-bottom: 0.15rem;
@@ -144,12 +144,11 @@ body {
 }
 
 .subtitle {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 0.95rem;
     font-weight: 400;
-    font-style: italic;
     color: var(--ink-light);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
 }
 
 .header-mascot {
@@ -203,142 +202,67 @@ main.screen.active {
     padding: 0;
 }
 
-/* Info Sections */
-.info-sections {
+/* Start Info Section */
+.start-info {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-bottom: var(--space-lg);
-}
-
-.info-card {
     text-align: center;
-    padding: var(--space-lg) var(--space-md);
-    position: relative;
+    margin-top: var(--space-lg);
+    max-width: 400px;
 }
 
-/* Elegant divider between cards */
-.info-card::before {
-    content: '·';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    font-size: 1.5rem;
-    color: var(--gold);
-    background: var(--cream);
-    padding: 0 var(--space-sm);
-    line-height: 1;
-}
-
-.info-card:first-child::before {
-    display: none;
-}
-
-/* Primary card (Today's Edition) */
-.info-card.primary {
-    padding: var(--space-xl) var(--space-md) var(--space-lg);
-}
-
-.info-card.primary .info-card-title {
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    color: var(--gold);
-    margin-bottom: var(--space-sm);
-}
-
-.info-card.primary .info-card-content {
-    font-size: 1.35rem;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-}
-
-.info-card.primary .info-card-subtitle {
-    font-size: 0.9rem;
-    margin-top: var(--space-sm);
-}
-
-/* Secondary cards */
-.info-card.secondary {
-    padding: var(--space-md) var(--space-md);
-}
-
-.info-card.secondary .info-card-title {
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    color: var(--gold);
-    margin-bottom: var(--space-sm);
-}
-
-.info-card.secondary .info-card-content {
-    font-size: 1rem;
-    color: var(--ink-light);
-}
-
-.info-card.secondary .info-card-subtitle {
-    font-size: 0.8rem;
-    color: var(--ink-muted);
-}
-
-.info-card-title {
+.today-date {
     font-family: var(--font-body);
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
+    font-size: 0.9rem;
     color: var(--ink-faded);
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
 }
 
-.info-card-content {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-style: italic;
-    color: var(--ink);
+.fun-fact-container {
+    margin-bottom: var(--space-md);
+}
+
+.fun-fact-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--ink-faded);
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: var(--space-xs);
+}
+
+.fun-fact {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink-light);
     line-height: 1.5;
+    margin: 0;
+    padding: 0 var(--space-sm);
+}
+
+.weather-bush {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--ink-faded);
     margin-bottom: 0;
 }
 
-.info-card-subtitle {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    color: var(--ink-faded);
-    font-style: italic;
-}
-
-/* Coat verdict styling */
-.coat-verdict {
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-style: normal;
-    letter-spacing: 0.02em;
-}
-
-.coat-verdict.yes {
-    color: var(--accent-red);
-}
-
-.coat-verdict.no {
-    color: var(--accent-green);
-}
-
 .stats-preview {
-    margin-top: var(--space-lg);
+    margin-top: var(--space-sm);
 }
 
 .stats-text {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--ink-faded);
-    font-style: italic;
 }
 
 .stats-display {
     display: flex;
     justify-content: center;
-    gap: var(--space-lg);
-    margin-top: var(--space-lg);
-    padding: var(--space-md);
+    gap: var(--space-md);
+    margin-top: var(--space-sm);
+    padding: var(--space-sm);
     flex-wrap: wrap;
 }
 
@@ -346,15 +270,14 @@ main.screen.active {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-xs);
-    min-width: 80px;
+    gap: 2px;
+    min-width: 60px;
 }
 
 .stat-label {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--ink-faded);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     font-family: var(--font-body);
 }
 
@@ -362,7 +285,7 @@ main.screen.active {
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--ink);
-    font-family: var(--font-display);
+    font-family: var(--font-body);
 }
 
 .streak-value {
@@ -387,9 +310,9 @@ main.screen.active {
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 1rem;
-    font-style: italic;
+    font-weight: 600;
     padding: 0.9rem var(--space-xl);
     background: var(--ink);
     color: var(--cream);
@@ -414,7 +337,6 @@ main.screen.active {
 
 .btn-arrow {
     transition: transform var(--transition-fast);
-    font-style: normal;
 }
 
 .btn-primary:hover .btn-arrow {
@@ -422,8 +344,9 @@ main.screen.active {
 }
 
 .btn-secondary {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 1rem;
+    font-weight: 600;
     padding: var(--space-sm) var(--space-lg);
     background: transparent;
     color: var(--ink);
@@ -511,10 +434,8 @@ main.screen.active {
 
 .question-counter {
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--ink-muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
 }
 
 .question-card {
@@ -539,7 +460,7 @@ main.screen.active {
 .question-number {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    font-style: italic;
+    font-weight: 600;
     color: var(--ink-faded);
     margin-bottom: var(--space-sm);
 }
@@ -644,9 +565,9 @@ main.screen.active {
 }
 
 .btn-submit {
-    font-family: var(--font-display);
-    font-size: 0.85rem;
-    font-style: italic;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
     padding: 0.7rem var(--space-lg);
     background: var(--ink);
     color: var(--cream);
@@ -697,7 +618,6 @@ main.screen.active {
 
 .btn-submit.next-mode .btn-text::after {
     content: ' →';
-    font-style: normal;
 }
 
 /* Feedback */
@@ -770,9 +690,9 @@ main.screen.active {
 }
 
 .feedback-text {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 1rem;
-    font-style: italic;
+    font-weight: 600;
 }
 
 .correct-answer {
@@ -803,13 +723,12 @@ main.screen.active {
 .results-title {
     font-family: var(--font-display);
     font-size: 2rem;
-    font-style: italic;
-    font-weight: 400;
+    font-weight: 600;
     margin-bottom: var(--space-xl);
 }
 
 .score-display {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 4rem;
     line-height: 1;
     margin-bottom: var(--space-lg);
@@ -823,7 +742,7 @@ main.screen.active {
 }
 
 .score-divider {
-    font-weight: 300;
+    font-weight: 400;
     color: var(--ink-faded);
 }
 
@@ -833,8 +752,7 @@ main.screen.active {
 }
 
 .results-message {
-    font-size: 1.1rem;
-    font-style: italic;
+    font-size: 1rem;
     color: var(--ink-light);
     max-width: 280px;
     margin-bottom: var(--space-xl);
@@ -875,15 +793,14 @@ main.screen.active {
 }
 
 .category-name {
-    font-family: var(--font-display);
-    font-style: italic;
+    font-family: var(--font-body);
     color: var(--ink-light);
 }
 
 .category-score {
     font-family: var(--font-body);
     color: var(--ink);
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .result-dot {
@@ -931,8 +848,9 @@ main.screen.active {
 }
 
 .btn-share {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 1rem;
+    font-weight: 600;
     padding: var(--space-md) var(--space-xl);
     background: var(--ink);
     color: var(--cream);
@@ -954,7 +872,6 @@ main.screen.active {
 .time-taken {
     font-size: 0.9rem;
     color: var(--ink-muted);
-    font-style: italic;
     margin-bottom: var(--space-md);
 }
 
@@ -1007,7 +924,7 @@ main.screen.active {
 .review-title {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 400;
+    font-weight: 600;
     text-align: center;
     margin-bottom: var(--space-xl);
 }
@@ -1028,9 +945,9 @@ main.screen.active {
 }
 
 .review-question-num {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 0.875rem;
-    font-style: italic;
+    font-weight: 600;
     color: var(--ink-faded);
     margin-bottom: var(--space-sm);
 }
@@ -1062,7 +979,6 @@ main.screen.active {
 
 .review-correct-answer {
     color: var(--ink-faded);
-    font-style: italic;
 }
 
 .review-answer-link {
@@ -1099,9 +1015,8 @@ main.screen.active {
 }
 
 .footer-text {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 0.85rem;
-    font-style: italic;
     color: var(--ink-faded);
 }
 
@@ -1242,7 +1157,6 @@ main.screen.active {
 
 .basic-mode .subtitle {
     color: #FF69B4;
-    font-style: normal;
     font-weight: 600;
 }
 
@@ -1263,23 +1177,67 @@ main.screen.active {
     75% { transform: translateY(-5px) rotate(3deg); }
 }
 
-/* Basic mode cards */
-.basic-mode .info-card {
-    background: rgba(255, 255, 255, 0.7);
+/* Basic mode start info */
+.basic-mode .start-info {
+    color: white;
+}
+
+.basic-mode .start-info {
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.7) 0%, rgba(255, 218, 233, 0.6) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: var(--space-md) var(--space-lg);
     border-radius: 20px;
-    margin: var(--space-sm) 0;
-    border: 2px solid #FFB6C1;
-    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.15);
+    border: 2px solid rgba(255, 105, 180, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
 }
 
-.basic-mode .info-card::before {
-    content: '💖';
-    background: transparent;
-    font-size: 1rem;
+.basic-mode .today-date {
+    color: #DB2777;
+    font-weight: 600;
 }
 
-.basic-mode .info-card-title {
-    color: #FF1493 !important;
+.basic-mode .fun-fact-label {
+    color: #DB2777;
+}
+
+.basic-mode .fun-fact {
+    color: #9D174D;
+}
+
+.basic-mode .weather-bush {
+    color: #BE185D;
+}
+
+.basic-mode .stats-preview {
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.6) 0%, rgba(255, 218, 233, 0.5) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 105, 180, 0.3);
+}
+
+.basic-mode .stats-text {
+    color: #BE185D;
+}
+
+.basic-mode .stats-display {
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.6) 0%, rgba(255, 218, 233, 0.5) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 105, 180, 0.3);
+}
+
+.basic-mode .stat-label {
+    color: #DB2777;
+}
+
+.basic-mode .stat-value {
+    color: #9D174D;
+    font-weight: 700;
 }
 
 /* Basic mode buttons */
@@ -1288,9 +1246,7 @@ main.screen.active {
     border: none;
     border-radius: 50px;
     color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    font-weight: 600;
     box-shadow: 0 4px 20px rgba(255, 20, 147, 0.4);
     animation: buttonPulseBasic 2s ease-in-out infinite;
 }
@@ -1449,8 +1405,6 @@ main.screen.active {
 .basic-mode .btn-share {
     background: linear-gradient(135deg, #FF1493, #FF69B4, #FFD700);
     border-radius: 50px;
-    font-weight: 700;
-    text-transform: uppercase;
 }
 
 .basic-mode .btn-share:hover {
@@ -1465,16 +1419,12 @@ main.screen.active {
 
 .basic-mode .footer-text {
     color: #FF69B4;
-    font-style: normal;
 }
 
 /* Basic mode stats */
-.basic-mode .stat-value {
-    color: #FF1493;
-}
-
 .basic-mode .streak-value {
-    color: #FFD700;
+    color: #FF1493;
+    animation: pulse 1.5s ease-in-out infinite;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 

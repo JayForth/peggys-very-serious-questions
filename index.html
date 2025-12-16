@@ -41,31 +41,21 @@
         <!-- Start Screen -->
         <main id="start-screen" class="screen active">
             <div class="start-content">
-                <div class="info-sections">
-                    <!-- Today's Edition -->
-                    <section class="info-card primary">
-                        <h2 class="info-card-title">Today's Edition</h2>
-                        <p class="info-card-content" id="today-date"></p>
-                    </section>
-
-                    <!-- Fun Fact -->
-                    <section class="info-card secondary">
-                        <h2 class="info-card-title">A Fun Fact</h2>
-                        <p class="info-card-content" id="fun-fact"></p>
-                    </section>
-
-                    <!-- Weather / Coat Check -->
-                    <section class="info-card secondary">
-                        <h2 class="info-card-title">Does Becky Need a Coat?</h2>
-                        <p class="info-card-content coat-verdict" id="coat-verdict">Checking...</p>
-                        <p class="info-card-subtitle" id="weather-details">Sheffield, UK</p>
-                    </section>
-                </div>
-
                 <button id="start-btn" class="btn-primary">
                     <span>Begin Today's Quiz</span>
                     <span class="btn-arrow">→</span>
                 </button>
+
+                <div class="start-info">
+                    <p class="today-date" id="today-date"></p>
+                    
+                    <div class="fun-fact-container">
+                        <span class="fun-fact-label">fun fact of the day:</span>
+                        <p class="fun-fact" id="fun-fact"></p>
+                    </div>
+                    
+                    <p class="weather-bush" id="weather-bush">Checking the weather bush...</p>
+                </div>
 
                 <div class="stats-preview" id="stats-preview">
                     <p class="stats-text"></p>
