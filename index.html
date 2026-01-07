@@ -743,7 +743,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             selectTodaysQuestions();
-            elements.fact.textContent = funFacts[Math.floor(Math.random() * funFacts.length)];
+            selectTodaysFact();
             elements.totalNum.textContent = todaysQuestions.length;
             checkWeather();
             setupModeToggle();
@@ -774,6 +774,14 @@
                 hash = hash & hash;
             }
             return Math.abs(hash);
+        }
+
+        // Select today's fun fact using date seed
+        function selectTodaysFact() {
+            const today = new Date();
+            const seed = hashCode(`fact-${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
+            const factIndex = seed % funFacts.length;
+            elements.fact.textContent = funFacts[factIndex];
         }
 
         // Weather Bush - Check if Beck needs a coat
