@@ -1096,14 +1096,6 @@
             elements.startBtn.disabled = true;
             elements.startBtn.style.opacity = '0.6';
 
-            // Show tomorrow's difficulty mix
-            const mix = getDifficultyMix();
-            const difficultyText = document.createElement('p');
-            difficultyText.className = 'subtitle';
-            difficultyText.style.marginTop = '8px';
-            difficultyText.textContent = `Tomorrow's mix: ${mix.label}`;
-            elements.startBtn.parentNode.insertBefore(difficultyText, elements.startBtn.nextSibling);
-
             // Add a "See Results" button
             const seeResultsBtn = document.createElement('button');
             seeResultsBtn.className = 'btn-outline';
@@ -1112,7 +1104,7 @@
             seeResultsBtn.onclick = () => {
                 finishQuiz();
             };
-            difficultyText.parentNode.insertBefore(seeResultsBtn, difficultyText.nextSibling);
+            elements.startBtn.parentNode.insertBefore(seeResultsBtn, elements.startBtn.nextSibling);
         }
 
         function hashCode(str) {
