@@ -4,35 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Peggy's Very Serious Questions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 60-30-10 Color System - Navy dominant */
-            --neutral-bg: #0f172a;
-            --neutral-surface: #1e293b;
-            --neutral-border: #334155;
+            /* Dark Academia Color System */
+            --neutral-bg: #1c1915;
+            --neutral-surface: #2a2520;
+            --neutral-border: #3d3630;
 
-            /* 30% Primary Brand Color */
-            --primary: #60a5fa;
-            --primary-light: #93c5fd;
+            /* Primary - Antique Gold */
+            --primary: #c9a227;
+            --primary-light: #dbb84d;
 
-            /* 10% Accent - CTA Only */
-            --accent: #f97316;
-            --accent-hover: #ea580c;
+            /* Accent - Deep Burgundy */
+            --accent: #8b3a3a;
+            --accent-hover: #a34848;
 
-            /* Text Colors */
-            --text-dark: #f1f5f9;
-            --text-muted: #94a3b8;
-            --text-light: #64748b;
+            /* Text Colors - Warm Ivory */
+            --text-dark: #e8e0d5;
+            --text-muted: #a89f91;
+            --text-light: #6b6358;
 
             /* Typography */
-            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Libre Baskerville', Georgia, serif;
             --font-body: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
 
             /* Spacing */
-            --radius: 10px;
-            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
-            --shadow-button: 0 2px 8px rgba(249, 115, 22, 0.35);
+            --radius: 8px;
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-button: 0 3px 12px rgba(139, 58, 58, 0.3);
         }
 
         /* Basic Mode Theme Override */
@@ -89,11 +89,41 @@
 
         /* Card Component */
         .card {
-            background: var(--neutral-bg);
+            background: var(--neutral-surface);
             border-radius: var(--radius);
             padding: 48px 40px;
             box-shadow: var(--shadow-card);
             border: 1px solid var(--neutral-border);
+            position: relative;
+        }
+
+        /* Decorative corner flourishes */
+        .card::before {
+            content: "§";
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            font-family: var(--font-heading);
+            font-size: 24px;
+            color: var(--primary);
+            opacity: 0.4;
+        }
+
+        .card::after {
+            content: "§";
+            position: absolute;
+            bottom: 16px;
+            right: 20px;
+            font-family: var(--font-heading);
+            font-size: 24px;
+            color: var(--primary);
+            opacity: 0.4;
+            transform: rotate(180deg);
+        }
+
+        [data-theme="basic"] .card::before,
+        [data-theme="basic"] .card::after {
+            display: none;
         }
 
         [data-theme="basic"] .card {
@@ -156,18 +186,24 @@
         }
 
         .subtitle {
-            font-family: var(--font-body);
-            font-size: 16px;
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-size: 15px;
             color: var(--text-muted);
             text-align: center;
             margin-bottom: 32px;
         }
 
+        [data-theme="basic"] .subtitle {
+            font-family: var(--font-body);
+            font-style: normal;
+        }
+
         /* Info Cards (Fun Fact & Weather) */
         .info-card {
-            background: var(--neutral-surface);
-            border: 1px solid var(--neutral-border);
-            border-radius: var(--radius);
+            background: var(--neutral-bg);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 var(--radius) var(--radius) 0;
             padding: 16px 20px;
             margin-bottom: 16px;
         }
@@ -175,33 +211,52 @@
         .info-card-label {
             font-family: var(--font-heading);
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-light);
-            margin-bottom: 6px;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            margin-bottom: 8px;
         }
 
         .info-card-content {
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        [data-theme="basic"] .info-card {
+            border-left: none;
+            border: 1px solid var(--neutral-border);
+            border-radius: var(--radius);
+        }
+
+        [data-theme="basic"] .info-card-content {
             font-family: var(--font-body);
-            font-size: 15px;
-            color: var(--text-dark);
-            line-height: 1.5;
+            font-style: normal;
         }
 
         .weather-bush {
-            background: var(--neutral-surface);
-            border: 1px solid var(--neutral-border);
-            border-radius: var(--radius);
+            background: var(--neutral-bg);
+            border-left: 3px solid var(--text-light);
+            border-radius: 0 var(--radius) var(--radius) 0;
             padding: 14px 20px;
             margin-bottom: 32px;
-            font-family: var(--font-body);
-            font-size: 14px;
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-size: 13px;
             color: var(--text-muted);
-            text-align: center;
+            text-align: left;
         }
 
         [data-theme="basic"] .weather-bush {
+            border-left: none;
+            border: 1px solid var(--neutral-border);
+            border-radius: var(--radius);
+            text-align: center;
+            font-family: var(--font-body);
+            font-style: normal;
             background: rgba(255, 182, 193, 0.3);
             color: #BE185D;
         }
