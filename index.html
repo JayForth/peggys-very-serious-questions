@@ -645,8 +645,8 @@
     </main>
 
     <script>
-        // Questions Data
-        const questions = [
+        // Fallback questions (used if API fails)
+        const fallbackQuestions = [
             {
                 question: "The doorbell rings. What is the only appropriate response?",
                 options: ["Bark uncontrollably", "Hide under the bed", "Offer them tea", "Ignore it"],
@@ -670,21 +670,6 @@
             {
                 question: "The squirrel is on the fence. How does this make you feel?",
                 options: ["Indifferent", "Rage", "Curiosity", "Joy"],
-                answer: 1
-            },
-            {
-                question: "The human is eating. What is the correct position to assume?",
-                options: ["Under the table, hopeful", "By the door, dignified", "On the sofa, aloof", "In another room"],
-                answer: 0
-            },
-            {
-                question: "A stranger approaches. How many barks are required?",
-                options: ["Zero", "One polite woof", "Seventeen minimum", "Until they leave"],
-                answer: 2
-            },
-            {
-                question: "The leash appears. What does this mean?",
-                options: ["Bath time", "Walkies!", "Vet visit", "Nothing good"],
                 answer: 1
             }
         ];
@@ -746,8 +731,8 @@
         };
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            selectTodaysQuestions();
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadTodaysQuestions();
             selectTodaysFact();
             elements.totalNum.textContent = todaysQuestions.length;
             checkWeather();
@@ -756,20 +741,93 @@
             updateMuteButton();
         });
 
-        // Select today's questions using date seed
-        function selectTodaysQuestions() {
-            const today = new Date();
-            const seed = hashCode(`${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
+        // Decode HTML entities from API
+        function decodeHTML(html) {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        }
 
-            let shuffled = [...questions];
-            let currentSeed = seed;
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                currentSeed = (currentSeed * 1103515245 + 12345) & 0x7fffffff;
-                const j = currentSeed % (i + 1);
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        // Get today's date string for caching
+        function getTodayKey() {
+            const today = new Date();
+            return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        }
+
+        // Load today's questions (from cache or API)
+        async function loadTodaysQuestions() {
+            const todayKey = getTodayKey();
+            const cached = localStorage.getItem('peggy-daily-questions');
+
+            if (cached) {
+                try {
+                    const data = JSON.parse(cached);
+                    if (data.date === todayKey && data.questions?.length === 5) {
+                        todaysQuestions = data.questions;
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Cache parse error, fetching fresh');
+                }
             }
 
-            todaysQuestions = shuffled.slice(0, 5);
+            // Fetch new questions from Open Trivia DB
+            await fetchTriviaQuestions(todayKey);
+        }
+
+        // Fetch from Open Trivia Database API
+        async function fetchTriviaQuestions(todayKey) {
+            try {
+                elements.startBtn.textContent = 'Loading questions...';
+                elements.startBtn.disabled = true;
+
+                // Mix of medium and hard difficulty for a pub quiz pro
+                const response = await fetch(
+                    'https://opentdb.com/api.php?amount=5&type=multiple&difficulty=medium'
+                );
+
+                if (!response.ok) throw new Error('API request failed');
+
+                const data = await response.json();
+
+                if (data.response_code !== 0 || !data.results?.length) {
+                    throw new Error('No questions returned');
+                }
+
+                // Transform API format to our format
+                todaysQuestions = data.results.map(q => {
+                    const options = [...q.incorrect_answers, q.correct_answer].map(decodeHTML);
+                    // Shuffle options
+                    for (let i = options.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [options[i], options[j]] = [options[j], options[i]];
+                    }
+                    const correctIndex = options.indexOf(decodeHTML(q.correct_answer));
+
+                    return {
+                        question: decodeHTML(q.question),
+                        options: options,
+                        answer: correctIndex,
+                        category: q.category
+                    };
+                });
+
+                // Cache for today
+                localStorage.setItem('peggy-daily-questions', JSON.stringify({
+                    date: todayKey,
+                    questions: todaysQuestions
+                }));
+
+                elements.startBtn.textContent = currentMode === 'basic' ? "Let's Go Bestie! 💅" : "Begin Today's Quiz";
+                elements.startBtn.disabled = false;
+
+            } catch (error) {
+                console.error('Trivia API error:', error);
+                // Use fallback questions
+                todaysQuestions = [...fallbackQuestions];
+                elements.startBtn.textContent = currentMode === 'basic' ? "Let's Go Bestie! 💅" : "Begin Today's Quiz";
+                elements.startBtn.disabled = false;
+            }
         }
 
         function hashCode(str) {
@@ -1098,8 +1156,8 @@
         }
 
         // Restart
-        document.getElementById('restart-btn').addEventListener('click', () => {
-            selectTodaysQuestions();
+        document.getElementById('restart-btn').addEventListener('click', async () => {
+            await loadTodaysQuestions();
             switchScreen('welcome');
         });
     </script>
