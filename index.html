@@ -7,23 +7,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Dark Academia + Navy Color System */
-            --neutral-bg: #151a24;
-            --neutral-surface: #1e2530;
-            --neutral-border: #2d3748;
+            /* Dark Academia - Navy & Gold */
+            --neutral-bg: #141c2b;
+            --neutral-surface: #1c2536;
+            --neutral-border: #2a3548;
 
-            /* Primary - Antique Gold */
-            --primary: #d4a84b;
-            --primary-light: #e4c374;
-
-            /* Accent - Deep Burgundy */
-            --accent: #8b3a3a;
-            --accent-hover: #a34848;
+            /* Primary & Accent - Antique Gold (unified) */
+            --primary: #c9a227;
+            --primary-light: #dbb84d;
+            --accent: #c9a227;
+            --accent-hover: #b89220;
 
             /* Text Colors - Warm Ivory */
             --text-dark: #e8e4dc;
-            --text-muted: #9ca3af;
-            --text-light: #64748b;
+            --text-muted: #a0a8b3;
+            --text-light: #5c6a7a;
 
             /* Typography */
             --font-heading: 'Libre Baskerville', Georgia, serif;
@@ -32,7 +30,7 @@
             /* Spacing */
             --radius: 8px;
             --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
-            --shadow-button: 0 3px 12px rgba(139, 58, 58, 0.3);
+            --shadow-button: 0 3px 12px rgba(201, 162, 39, 0.25);
         }
 
         /* Basic Mode Theme Override */
@@ -238,10 +236,10 @@
             display: block;
             width: 100%;
             background-color: var(--accent);
-            color: #FFFFFF;
+            color: #1a1a1a;
             font-family: var(--font-heading);
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             padding: 16px 32px;
             min-height: 52px;
             border: none;
@@ -262,6 +260,7 @@
 
         [data-theme="basic"] .btn-primary {
             background: linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FFD700 100%);
+            color: #FFFFFF;
             box-shadow: 0 4px 20px rgba(255, 20, 147, 0.4);
             animation: buttonPulseBasic 2s ease-in-out infinite;
         }
