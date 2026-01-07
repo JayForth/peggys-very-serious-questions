@@ -7,23 +7,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Dark Academia Color System */
-            --neutral-bg: #1c1915;
-            --neutral-surface: #2a2520;
-            --neutral-border: #3d3630;
+            /* Dark Academia + Navy Color System */
+            --neutral-bg: #151a24;
+            --neutral-surface: #1e2530;
+            --neutral-border: #2d3748;
 
             /* Primary - Antique Gold */
-            --primary: #c9a227;
-            --primary-light: #dbb84d;
+            --primary: #d4a84b;
+            --primary-light: #e4c374;
 
             /* Accent - Deep Burgundy */
             --accent: #8b3a3a;
             --accent-hover: #a34848;
 
             /* Text Colors - Warm Ivory */
-            --text-dark: #e8e0d5;
-            --text-muted: #a89f91;
-            --text-light: #6b6358;
+            --text-dark: #e8e4dc;
+            --text-muted: #9ca3af;
+            --text-light: #64748b;
 
             /* Typography */
             --font-heading: 'Libre Baskerville', Georgia, serif;
@@ -97,34 +97,6 @@
             position: relative;
         }
 
-        /* Decorative corner flourishes */
-        .card::before {
-            content: "§";
-            position: absolute;
-            top: 16px;
-            left: 20px;
-            font-family: var(--font-heading);
-            font-size: 24px;
-            color: var(--primary);
-            opacity: 0.4;
-        }
-
-        .card::after {
-            content: "§";
-            position: absolute;
-            bottom: 16px;
-            right: 20px;
-            font-family: var(--font-heading);
-            font-size: 24px;
-            color: var(--primary);
-            opacity: 0.4;
-            transform: rotate(180deg);
-        }
-
-        [data-theme="basic"] .card::before,
-        [data-theme="basic"] .card::after {
-            display: none;
-        }
 
         [data-theme="basic"] .card {
             border: 3px solid #FFB6C1;
