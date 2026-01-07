@@ -6,30 +6,18 @@
     <title>Peggy's Very Serious Questions</title>
     <style>
         :root {
-            /* Playful Theme (Default) */
-            --bg-color: #fdf6e3;
+            /* Classic Theme (Default) - Blue palette */
+            --bg-color: #F0F7FF;
             --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-sub: #7f8c8d;
-            --accent-color: #e67e22;
-            --accent-hover: #d35400;
-            --secondary-bg: #fae5d3;
+            --text-main: #1e3a5f;
+            --text-sub: #64748b;
+            --accent-color: #3B82F6;
+            --accent-hover: #2563EB;
+            --secondary-bg: #DBEAFE;
             --border-radius: 24px;
             --font-heading: 'Merriweather', serif;
             --font-body: 'Inter', sans-serif;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        [data-theme="serious"] {
-            /* Serious/Classic Theme */
-            --bg-color: #1a1a1a;
-            --card-bg: #2d2d2d;
-            --text-main: #e0e0e0;
-            --text-sub: #a0a0a0;
-            --accent-color: #d4af37;
-            --accent-hover: #b5952f;
-            --secondary-bg: #3d3d3d;
-            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --shadow: 0 10px 30px rgba(59, 130, 246, 0.12);
         }
 
         /* Basic Mode Theme */
@@ -55,6 +43,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
             padding: 20px;
         }
@@ -72,85 +61,10 @@
             100% { background-position: 0% 50%; }
         }
 
-        header {
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px 0;
-        }
-
-        .brand {
-            font-family: var(--font-heading);
-            font-weight: 900;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .brand:hover .brand-text {
-            color: var(--accent-color);
-        }
-
-        .brand-logo {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            transition: transform 0.2s;
-        }
-
-        .brand:hover .brand-logo {
-            transform: scale(1.1);
-        }
-
-        [data-theme="basic"] .brand-logo {
-            filter: drop-shadow(0 0 8px rgba(255, 20, 147, 0.5));
-            animation: mascotBounce 2s ease-in-out infinite;
-        }
-
         @keyframes mascotBounce {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             25% { transform: translateY(-3px) rotate(-2deg); }
             75% { transform: translateY(-3px) rotate(2deg); }
-        }
-
-        .controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .controls button {
-            background: none;
-            border: 2px solid var(--text-sub);
-            color: var(--text-sub);
-            padding: 5px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .controls button:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .controls button.active {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-            color: white;
-        }
-
-        [data-theme="basic"] .controls button.active {
-            background: linear-gradient(135deg, #FF1493, #FF69B4);
-            border-color: transparent;
         }
 
         main {
@@ -502,16 +416,6 @@
         <span class="mute-icon" id="mute-icon">🔊</span>
     </button>
 
-    <header>
-        <a href="#" class="brand" id="home-link">
-            <img src="peggy.png" alt="Peggy" class="brand-logo" id="brand-logo">
-            <span class="brand-text">Peggy's</span>
-        </a>
-        <div class="controls">
-            <button id="themeToggle">✨ Theme</button>
-        </div>
-    </header>
-
     <main>
         <div id="welcome-screen" class="card">
             <div class="hero-img">
@@ -657,8 +561,6 @@
             totalNum: document.getElementById('total-q-num'),
             progress: document.getElementById('progress-fill'),
             finalScore: document.getElementById('final-score'),
-            themeBtn: document.getElementById('themeToggle'),
-            brandLogo: document.getElementById('brand-logo'),
             heroLogo: document.getElementById('hero-logo'),
             resultLogo: document.getElementById('result-logo'),
             mainTitle: document.getElementById('main-title'),
@@ -784,7 +686,6 @@
                 document.body.setAttribute('data-theme', 'basic');
 
                 // Update logos
-                elements.brandLogo.src = 'Peggy-basic.png';
                 elements.heroLogo.src = 'Peggy-basic.png';
                 elements.resultLogo.src = 'Peggy-basic.png';
 
@@ -810,7 +711,6 @@
                 document.body.removeAttribute('data-theme');
 
                 // Update logos
-                elements.brandLogo.src = 'peggy.png';
                 elements.heroLogo.src = 'peggy.png';
                 elements.resultLogo.src = 'peggy.png';
 
@@ -913,16 +813,6 @@
             }
         }
 
-        // Theme Toggle (Playful/Serious)
-        let isSerious = false;
-        elements.themeBtn.addEventListener('click', () => {
-            if (currentMode === 'basic') return; // Don't toggle theme in basic mode
-
-            isSerious = !isSerious;
-            document.body.setAttribute('data-theme', isSerious ? 'serious' : '');
-            elements.themeBtn.textContent = isSerious ? '🧐 Classic' : '✨ Theme';
-        });
-
         // Start Quiz
         document.getElementById('start-btn').addEventListener('click', startQuiz);
 
@@ -1022,12 +912,6 @@
         // Restart
         document.getElementById('restart-btn').addEventListener('click', () => {
             selectTodaysQuestions();
-            switchScreen('welcome');
-        });
-
-        // Home link
-        document.getElementById('home-link').addEventListener('click', (e) => {
-            e.preventDefault();
             switchScreen('welcome');
         });
     </script>
