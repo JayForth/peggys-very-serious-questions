@@ -395,7 +395,7 @@
 
         .option-btn {
             background: var(--neutral-surface);
-            border: 1px solid var(--neutral-border);
+            border: 2px solid var(--neutral-border);
             color: var(--text-dark);
             font-family: var(--font-body);
             font-size: 16px;
@@ -403,12 +403,16 @@
             border-radius: var(--radius);
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s ease;
+            transition: background 0.2s ease;
         }
 
         .option-btn:hover {
             border-color: var(--primary);
             background: var(--neutral-bg);
+        }
+
+        .option-btn:active {
+            border-color: var(--neutral-border);
         }
 
         [data-theme="basic"] .option-btn {
@@ -1201,6 +1205,10 @@
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.textContent = opt;
+                // Explicitly reset styles to prevent carryover
+                btn.style.borderColor = '';
+                btn.style.background = '';
+                btn.style.animation = 'none';
                 btn.onclick = () => handleAnswer(index);
                 elements.options.appendChild(btn);
             });
