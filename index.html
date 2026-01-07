@@ -895,8 +895,8 @@
         };
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            selectTodaysQuestions();
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadTodaysQuestions();
             selectTodaysFact();
             elements.totalNum.textContent = todaysQuestions.length;
             checkWeather();
@@ -910,6 +910,133 @@
         function getTodayKey() {
             const today = new Date();
             return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        }
+
+        // Calculate difficulty based on rolling average of last 7 scores
+        function getAdaptiveDifficulty() {
+            const history = JSON.parse(localStorage.getItem('peggy-score-history') || '[]');
+            if (history.length < 3) return 'medium'; // Not enough data, start medium
+
+            // Get last 7 scores
+            const recentScores = history.slice(-7).map(h => h.score);
+            const average = recentScores.reduce((a, b) => a + b, 0) / recentScores.length;
+
+            if (average >= 4) return 'hard';
+            if (average <= 2) return 'easy';
+            return 'medium';
+        }
+
+        // Save score to history
+        function saveScoreToHistory(score) {
+            const history = JSON.parse(localStorage.getItem('peggy-score-history') || '[]');
+            const todayKey = getTodayKey();
+
+            // Don't duplicate today's entry
+            if (history.length > 0 && history[history.length - 1].date === todayKey) return;
+
+            history.push({ date: todayKey, score: score });
+            // Keep last 30 days
+            if (history.length > 30) history.shift();
+            localStorage.setItem('peggy-score-history', JSON.stringify(history));
+        }
+
+        // Decode HTML entities from API
+        function decodeHTML(html) {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        // Load today's questions (from cache or API)
+        async function loadTodaysQuestions() {
+            const todayKey = getTodayKey();
+            const cached = localStorage.getItem('peggy-daily-questions');
+
+            if (cached) {
+                try {
+                    const data = JSON.parse(cached);
+                    if (data.date === todayKey && data.questions?.length === 5) {
+                        todaysQuestions = data.questions;
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Cache parse error, fetching fresh');
+                }
+            }
+
+            // Fetch new questions from API
+            await fetchTriviaQuestions(todayKey);
+        }
+
+        // Fetch from Open Trivia Database API with adaptive difficulty
+        async function fetchTriviaQuestions(todayKey) {
+            const difficulty = getAdaptiveDifficulty();
+
+            try {
+                elements.startBtn.textContent = 'Loading questions...';
+                elements.startBtn.disabled = true;
+
+                const response = await fetch(
+                    `https://opentdb.com/api.php?amount=5&type=multiple&difficulty=${difficulty}`
+                );
+
+                if (!response.ok) throw new Error('API request failed');
+
+                const data = await response.json();
+
+                if (data.response_code !== 0 || !data.results?.length) {
+                    throw new Error('No questions returned');
+                }
+
+                // Transform API format to our format
+                todaysQuestions = data.results.map(q => {
+                    const options = [...q.incorrect_answers, q.correct_answer].map(decodeHTML);
+                    // Shuffle options deterministically
+                    for (let i = options.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [options[i], options[j]] = [options[j], options[i]];
+                    }
+                    const correctIndex = options.indexOf(decodeHTML(q.correct_answer));
+
+                    return {
+                        question: decodeHTML(q.question),
+                        options: options,
+                        answer: correctIndex,
+                        category: q.category,
+                        difficulty: q.difficulty
+                    };
+                });
+
+                // Cache for today
+                localStorage.setItem('peggy-daily-questions', JSON.stringify({
+                    date: todayKey,
+                    questions: todaysQuestions,
+                    difficulty: difficulty
+                }));
+
+                elements.startBtn.textContent = currentMode === 'basic' ? "Let's Go Bestie! 💅" : "Begin Today's Quiz";
+                elements.startBtn.disabled = false;
+
+            } catch (error) {
+                console.error('Trivia API error:', error);
+                // Use fallback questions from static bank
+                useFallbackQuestions();
+            }
+        }
+
+        // Fallback to static questions if API fails
+        function useFallbackQuestions() {
+            const seed = hashCode(getTodayKey());
+            let shuffled = [...questionBank];
+            let currentSeed = seed;
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                currentSeed = (currentSeed * 1103515245 + 12345) & 0x7fffffff;
+                const j = currentSeed % (i + 1);
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            todaysQuestions = shuffled.slice(0, 5);
+            elements.startBtn.textContent = currentMode === 'basic' ? "Let's Go Bestie! 💅" : "Begin Today's Quiz";
+            elements.startBtn.disabled = false;
         }
 
         // Check if user already played today
@@ -936,6 +1063,14 @@
             elements.startBtn.disabled = true;
             elements.startBtn.style.opacity = '0.6';
 
+            // Show current difficulty level
+            const difficulty = getAdaptiveDifficulty();
+            const difficultyText = document.createElement('p');
+            difficultyText.className = 'subtitle';
+            difficultyText.style.marginTop = '8px';
+            difficultyText.textContent = `Tomorrow's difficulty: ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
+            elements.startBtn.parentNode.insertBefore(difficultyText, elements.startBtn.nextSibling);
+
             // Add a "See Results" button
             const seeResultsBtn = document.createElement('button');
             seeResultsBtn.className = 'btn-outline';
@@ -944,24 +1079,7 @@
             seeResultsBtn.onclick = () => {
                 finishQuiz();
             };
-            elements.startBtn.parentNode.insertBefore(seeResultsBtn, elements.startBtn.nextSibling);
-        }
-
-        // Select today's questions using date seed (same for all users)
-        function selectTodaysQuestions() {
-            const todayKey = getTodayKey();
-            const seed = hashCode(todayKey);
-
-            // Create deterministic shuffle using seed
-            let shuffled = [...questionBank];
-            let currentSeed = seed;
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                currentSeed = (currentSeed * 1103515245 + 12345) & 0x7fffffff;
-                const j = currentSeed % (i + 1);
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-
-            todaysQuestions = shuffled.slice(0, 5);
+            difficultyText.parentNode.insertBefore(seeResultsBtn, difficultyText.nextSibling);
         }
 
         function hashCode(str) {
@@ -1309,6 +1427,9 @@
             localStorage.setItem('peggy-last-played', todayKey);
             localStorage.setItem('peggy-last-score', score.toString());
             localStorage.setItem('peggy-last-answers', JSON.stringify(userAnswers));
+
+            // Save score to history for adaptive difficulty
+            saveScoreToHistory(score);
 
             // Hide Play Again button
             document.getElementById('restart-btn').style.display = 'none';
