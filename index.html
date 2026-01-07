@@ -420,6 +420,90 @@
             background: #FFE4EC;
         }
 
+        .option-btn.correct {
+            background: #22c55e !important;
+            border-color: #16a34a !important;
+            color: white !important;
+        }
+
+        .option-btn.incorrect {
+            background: #ef4444 !important;
+            border-color: #dc2626 !important;
+            color: white !important;
+        }
+
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Review Section */
+        .review-section {
+            margin-top: 24px;
+            border-top: 1px solid var(--neutral-border);
+            padding-top: 24px;
+        }
+
+        .review-title {
+            font-family: var(--font-heading);
+            font-size: 16px;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .review-item {
+            background: var(--neutral-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .review-question {
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .review-answer {
+            font-family: var(--font-body);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .review-answer.correct {
+            color: #22c55e;
+        }
+
+        .review-answer.incorrect {
+            color: #ef4444;
+        }
+
+        .review-correct-answer {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .wiki-link {
+            display: inline-block;
+            font-size: 12px;
+            color: var(--primary);
+            text-decoration: none;
+            margin-top: 8px;
+        }
+
+        .wiki-link:hover {
+            text-decoration: underline;
+        }
+
+        [data-theme="basic"] .review-item {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
         /* Results Screen */
         .score-display {
             text-align: center;
@@ -641,6 +725,11 @@
                 <button class="btn-primary" id="share-btn">Share Score</button>
                 <button class="btn-outline" id="restart-btn">Play Again</button>
             </div>
+
+            <div class="review-section">
+                <h3 class="review-title">Review Your Answers</h3>
+                <div id="review-container"></div>
+            </div>
         </div>
     </main>
 
@@ -699,6 +788,7 @@
         let currentMode = localStorage.getItem('peggy-mode') || 'classic';
         let isMuted = localStorage.getItem('peggy-muted') === 'true';
         let emojiRainInterval = null;
+        let userAnswers = [];
 
         // Elements
         const screens = {
@@ -727,7 +817,8 @@
             shareBtn: document.getElementById('share-btn'),
             muteBtn: document.getElementById('mute-btn'),
             muteIcon: document.getElementById('mute-icon'),
-            sound: document.getElementById('mode-sound')
+            sound: document.getElementById('mode-sound'),
+            reviewContainer: document.getElementById('review-container')
         };
 
         // Initialize
@@ -1064,6 +1155,7 @@
         function startQuiz() {
             currentQuestionIndex = 0;
             score = 0;
+            userAnswers = [];
             switchScreen('quiz');
             loadQuestion();
         }
@@ -1092,19 +1184,39 @@
         }
 
         function handleAnswer(selectedIndex) {
-            if (selectedIndex === todaysQuestions[currentQuestionIndex].answer) {
+            const question = todaysQuestions[currentQuestionIndex];
+            const isCorrect = selectedIndex === question.answer;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            // Store answer for review
+            userAnswers.push({
+                questionIndex: currentQuestionIndex,
+                selected: selectedIndex,
+                correct: question.answer,
+                isCorrect: isCorrect
+            });
+
+            // Disable all buttons
+            buttons.forEach(btn => btn.classList.add('disabled'));
+
+            // Show correct/incorrect feedback
+            if (isCorrect) {
                 score++;
-            }
-
-            currentQuestionIndex++;
-
-            if (currentQuestionIndex < todaysQuestions.length) {
-                document.querySelectorAll('.option-btn')[selectedIndex].style.background = 'var(--neutral-surface)';
-                document.querySelectorAll('.option-btn')[selectedIndex].style.borderColor = 'var(--primary)';
-                setTimeout(loadQuestion, 250);
+                buttons[selectedIndex].classList.add('correct');
             } else {
-                finishQuiz();
+                buttons[selectedIndex].classList.add('incorrect');
+                buttons[question.answer].classList.add('correct');
             }
+
+            // Move to next question after delay
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < todaysQuestions.length) {
+                    loadQuestion();
+                } else {
+                    finishQuiz();
+                }
+            }, isCorrect ? 800 : 1500);
         }
 
         function finishQuiz() {
@@ -1128,6 +1240,44 @@
             };
 
             elements.resultMessage.textContent = messages[score] || `You scored ${score} out of ${todaysQuestions.length}.`;
+
+            // Build review section
+            buildReviewSection();
+        }
+
+        function buildReviewSection() {
+            elements.reviewContainer.innerHTML = '';
+
+            userAnswers.forEach((answer, index) => {
+                const question = todaysQuestions[answer.questionIndex];
+                const userAnswer = question.options[answer.selected];
+                const correctAnswer = question.options[answer.correct];
+
+                const item = document.createElement('div');
+                item.className = 'review-item';
+
+                let html = `
+                    <div class="review-question">${index + 1}. ${question.question}</div>
+                    <div class="review-answer ${answer.isCorrect ? 'correct' : 'incorrect'}">
+                        ${answer.isCorrect ? '✓' : '✗'} Your answer: ${userAnswer}
+                    </div>
+                `;
+
+                if (!answer.isCorrect) {
+                    // Generate Wikipedia search link based on correct answer
+                    const wikiQuery = encodeURIComponent(correctAnswer);
+                    html += `
+                        <div class="review-correct-answer">Correct answer: ${correctAnswer}</div>
+                        <a href="https://en.wikipedia.org/wiki/Special:Search?search=${wikiQuery}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="wiki-link">📚 Learn more on Wikipedia →</a>
+                    `;
+                }
+
+                item.innerHTML = html;
+                elements.reviewContainer.appendChild(item);
+            });
         }
 
         // Share
