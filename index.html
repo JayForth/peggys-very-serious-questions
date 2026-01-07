@@ -4,48 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Peggy's Very Serious Questions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Classic Theme (Default) - Dark Academia */
-            --bg-color: #171c28;
-            --card-bg: #1e2433;
-            --text-main: #d4cfc4;
-            --text-sub: #8a857a;
-            --accent-color: #8b4049;
-            --accent-hover: #a34d58;
-            --secondary-bg: #262d3d;
-            --border-radius: 12px;
-            --font-heading: 'Merriweather', serif;
-            --font-body: 'Inter', sans-serif;
-            --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            /* 60-30-10 Color System */
+            --neutral-bg: #FFFFFF;
+            --neutral-surface: #F8F9FA;
+            --neutral-border: #EAECEF;
+
+            /* 30% Primary Brand Color */
+            --primary: #1E3A5F;
+            --primary-light: #2D5A8A;
+
+            /* 10% Accent - CTA Only */
+            --accent: #E85D45;
+            --accent-hover: #D14D36;
+
+            /* Text Colors */
+            --text-dark: #111827;
+            --text-muted: #6B7280;
+            --text-light: #9CA3AF;
+
+            /* Typography */
+            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            /* Spacing */
+            --radius: 10px;
+            --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-button: 0 2px 8px rgba(232, 93, 69, 0.25);
         }
 
-        /* Basic Mode Theme */
+        /* Basic Mode Theme Override */
         [data-theme="basic"] {
-            --bg-color: #FFF0F5;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --text-main: #FF1493;
-            --text-sub: #FF69B4;
-            --accent-color: #FF1493;
+            --neutral-bg: #FFF0F5;
+            --neutral-surface: #FFE4EC;
+            --neutral-border: #FFB6C1;
+            --primary: #FF1493;
+            --primary-light: #FF69B4;
+            --accent: #FF1493;
             --accent-hover: #FF69B4;
-            --secondary-bg: #FFE4EC;
-            --border-radius: 30px;
-            --shadow: 0 10px 30px rgba(255, 20, 147, 0.2);
+            --text-dark: #9D174D;
+            --text-muted: #BE185D;
         }
 
-        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            margin: 0;
             font-family: var(--font-body);
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-size: 17px;
+            line-height: 1.6;
+            background-color: var(--neutral-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
         }
 
         /* Basic mode animated background */
@@ -61,37 +81,31 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes mascotBounce {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-3px) rotate(-2deg); }
-            75% { transform: translateY(-3px) rotate(2deg); }
-        }
-
+        /* Main Container */
         main {
             width: 100%;
-            max-width: 600px;
-            position: relative;
+            max-width: 520px;
         }
 
+        /* Card Component */
         .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 40px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            animation: fadeIn 0.5s ease-out;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--neutral-bg);
+            border-radius: var(--radius);
+            padding: 48px 40px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--neutral-border);
         }
 
         [data-theme="basic"] .card {
             border: 3px solid #FFB6C1;
+            background: rgba(255, 255, 255, 0.95);
         }
 
-        /* Hero / Welcome State */
+        /* Hero Image */
         .hero-img {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -108,10 +122,20 @@
             animation: mascotBounce 2s ease-in-out infinite;
         }
 
+        @keyframes mascotBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-3px) rotate(-2deg); }
+            75% { transform: translateY(-3px) rotate(2deg); }
+        }
+
+        /* Typography */
         h1 {
             font-family: var(--font-heading);
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 8px;
             line-height: 1.2;
         }
 
@@ -129,61 +153,82 @@
             100% { background-position: 200% center; }
         }
 
-        p.subtitle {
-            color: var(--text-sub);
-            margin-bottom: 30px;
+        .subtitle {
+            font-family: var(--font-body);
+            font-size: 16px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 32px;
         }
 
-        .fun-fact {
-            background-color: var(--secondary-bg);
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            font-style: italic;
+        /* Info Cards (Fun Fact & Weather) */
+        .info-card {
+            background: var(--neutral-surface);
+            border: 1px solid var(--neutral-border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 16px;
         }
 
-        .fun-fact-label {
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            text-transform: lowercase;
-            letter-spacing: 0.05em;
-            display: block;
-            margin-bottom: 5px;
-            font-style: normal;
+        .info-card-label {
+            font-family: var(--font-heading);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .info-card-content {
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--text-dark);
+            line-height: 1.5;
         }
 
         .weather-bush {
-            background-color: var(--secondary-bg);
-            padding: 12px 15px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            margin-bottom: 30px;
-            font-style: italic;
-            color: var(--text-sub);
+            background: var(--neutral-surface);
+            border: 1px solid var(--neutral-border);
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            margin-bottom: 32px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-muted);
+            text-align: center;
         }
 
         [data-theme="basic"] .weather-bush {
-            background: linear-gradient(135deg, rgba(255, 182, 193, 0.6), rgba(255, 218, 233, 0.5));
+            background: rgba(255, 182, 193, 0.3);
             color: #BE185D;
         }
 
+        /* Primary CTA Button - Uses Accent Color ONLY */
         .btn-primary {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
+            display: block;
             width: 100%;
-            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            background-color: var(--accent);
+            color: #FFFFFF;
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 16px 32px;
+            min-height: 52px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            box-shadow: var(--shadow-button);
+            transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
         .btn-primary:hover {
             background-color: var(--accent-hover);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         [data-theme="basic"] .btn-primary {
@@ -192,45 +237,72 @@
             animation: buttonPulseBasic 2s ease-in-out infinite;
         }
 
-        [data-theme="basic"] .btn-primary:hover {
-            background: linear-gradient(135deg, #FFD700 0%, #FF69B4 50%, #FF1493 100%);
-        }
-
         @keyframes buttonPulseBasic {
             0%, 100% { box-shadow: 0 4px 20px rgba(255, 20, 147, 0.4); }
             50% { box-shadow: 0 6px 30px rgba(255, 20, 147, 0.6); }
+        }
+
+        /* Secondary/Outline Button - Uses Primary Brand Color */
+        .btn-outline {
+            display: inline-block;
+            background: transparent;
+            color: var(--primary);
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #FFFFFF;
+        }
+
+        [data-theme="basic"] .btn-outline {
+            border-color: #FF1493;
+            color: #FF1493;
+        }
+
+        [data-theme="basic"] .btn-outline:hover {
+            background: linear-gradient(135deg, #FF1493, #FF69B4);
+            color: #FFFFFF;
+            border-color: transparent;
         }
 
         /* Mode Toggle */
         .mode-toggle {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 24px;
         }
 
         .mode-btn {
-            font-family: var(--font-body);
-            font-size: 0.75rem;
-            padding: 6px 14px;
+            font-family: var(--font-heading);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
             background: transparent;
-            color: var(--text-sub);
-            border: 1px solid var(--text-sub);
+            color: var(--text-muted);
+            border: 1px solid var(--neutral-border);
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.2s;
-            letter-spacing: 0.03em;
+            transition: all 0.2s ease;
         }
 
         .mode-btn:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         .mode-btn.active {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
+            background: var(--primary);
+            color: #FFFFFF;
+            border-color: var(--primary);
         }
 
         [data-theme="basic"] .mode-btn.active {
@@ -238,31 +310,32 @@
             border-color: transparent;
         }
 
-        /* Quiz State */
+        /* Quiz Screen */
         .progress-container {
-            margin-bottom: 30px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
-            color: var(--text-sub);
+            gap: 12px;
+            margin-bottom: 32px;
+            font-family: var(--font-heading);
+            font-size: 14px;
             font-weight: 600;
+            color: var(--text-muted);
         }
 
         .progress-bar-bg {
-            flex-grow: 1;
-            height: 8px;
-            background-color: var(--secondary-bg);
-            margin: 0 15px;
-            border-radius: 4px;
+            flex: 1;
+            height: 6px;
+            background: var(--neutral-surface);
+            border-radius: 3px;
             overflow: hidden;
         }
 
         .progress-bar-fill {
             height: 100%;
-            background-color: var(--accent-color);
+            background: var(--primary);
             width: 0%;
             transition: width 0.4s ease;
+            border-radius: 3px;
         }
 
         [data-theme="basic"] .progress-bar-fill {
@@ -271,56 +344,93 @@
 
         .question-text {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
-            margin-bottom: 40px;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-dark);
             text-align: left;
+            margin-bottom: 28px;
+            line-height: 1.4;
         }
 
         .options-grid {
-            display: grid;
-            gap: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .option-btn {
-            background-color: var(--bg-color);
-            border: 2px solid transparent;
-            color: var(--text-main);
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-size: 1rem;
+            background: var(--neutral-surface);
+            border: 1px solid var(--neutral-border);
+            color: var(--text-dark);
+            font-family: var(--font-body);
+            font-size: 16px;
+            padding: 16px 20px;
+            border-radius: var(--radius);
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
-            font-family: var(--font-body);
+            transition: all 0.2s ease;
         }
 
         .option-btn:hover {
-            border-color: var(--accent-color);
-            background-color: var(--secondary-bg);
+            border-color: var(--primary);
+            background: #FFFFFF;
         }
 
         [data-theme="basic"] .option-btn:hover {
             border-color: #FF1493;
-            background-color: #FFE4EC;
+            background: #FFE4EC;
         }
 
-        /* Results State */
+        /* Results Screen */
         .score-display {
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--accent-color);
-            font-family: var(--font-heading);
-            margin: 20px 0;
+            text-align: center;
+            margin: 24px 0;
         }
 
-        .hidden { display: none; }
+        .score-number {
+            font-family: var(--font-heading);
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .score-divider {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        .result-message {
+            font-family: var(--font-body);
+            font-size: 16px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .results-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mute Button */
+        .card {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Mute Button - Only visible in Basic mode */
         .mute-btn {
             position: fixed;
             top: 20px;
@@ -346,7 +456,7 @@
         }
 
         .mute-btn.muted {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.1);
             box-shadow: none;
         }
 
@@ -354,7 +464,7 @@
             display: flex;
         }
 
-        /* Emoji Rain */
+        /* Emoji Rain - Basic mode only */
         .emoji-rain-container {
             position: fixed;
             top: 0;
@@ -375,37 +485,47 @@
         }
 
         @keyframes emojiRainFall {
-            0% {
-                transform: translateY(-50px) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: var(--emoji-opacity, 0.6);
-            }
-            90% {
-                opacity: var(--emoji-opacity, 0.6);
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            10% { opacity: var(--emoji-opacity, 0.6); }
+            90% { opacity: var(--emoji-opacity, 0.6); }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Responsive */
-        @media (max-width: 480px) {
-            .card { padding: 25px; }
-            h1 { font-size: 1.6rem; }
-            .question-text { font-size: 1.3rem; }
+        /* Mobile Responsive */
+        @media (max-width: 560px) {
+            body {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            .score-number {
+                font-size: 52px;
+            }
+
             .mute-btn {
-                top: 15px;
-                right: 15px;
+                top: 12px;
+                right: 12px;
                 width: 40px;
                 height: 40px;
                 font-size: 1rem;
             }
+
+            .mode-toggle {
+                flex-wrap: wrap;
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:ital,wght@0,700;0,900;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Audio for Basic mode -->
@@ -426,9 +546,9 @@
             <h1 id="main-title">Peggy's Very Serious Questions</h1>
             <p class="subtitle" id="main-subtitle">A daily inquiry into the matters of utmost canine importance.</p>
 
-            <div class="fun-fact">
-                <span class="fun-fact-label">fun fact of the day:</span>
-                <span id="daily-fact">Checking the archives...</span>
+            <div class="info-card">
+                <div class="info-card-label">Fun fact of the day</div>
+                <div class="info-card-content" id="daily-fact">Checking the archives...</div>
             </div>
 
             <div class="weather-bush" id="weather-bush">
@@ -465,14 +585,16 @@
             <p class="subtitle" id="results-subtitle">Here is your standing with the Good Girl.</p>
 
             <div class="score-display">
-                <span id="final-score">0</span><span style="font-size: 2rem; color: var(--text-sub)">/5</span>
+                <span class="score-number" id="final-score">0</span>
+                <span class="score-divider">/5</span>
             </div>
 
-            <p id="result-message">Return tomorrow for fresh inquiries.</p>
+            <p class="result-message" id="result-message">Return tomorrow for fresh inquiries.</p>
 
-            <button class="btn-primary" id="share-btn">Share Score</button>
-            <br><br>
-            <button class="mode-btn" id="restart-btn">Play Again</button>
+            <div class="results-actions">
+                <button class="btn-primary" id="share-btn">Share Score</button>
+                <button class="btn-outline" id="restart-btn">Play Again</button>
+            </div>
         </div>
     </main>
 
@@ -593,7 +715,6 @@
             const today = new Date();
             const seed = hashCode(`${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
 
-            // Shuffle with seed
             let shuffled = [...questions];
             let currentSeed = seed;
             for (let i = shuffled.length - 1; i > 0; i--) {
@@ -617,7 +738,6 @@
         // Weather Bush - Check if Beck needs a coat
         async function checkWeather() {
             try {
-                // Sheffield, UK coordinates
                 const lat = 53.38;
                 const lon = -1.47;
 
@@ -636,7 +756,6 @@
                 const windSpeed = current.wind_speed_10m;
                 const weatherCode = current.weather_code;
 
-                // Coat needed if: temp < 14°C, or raining, or very windy
                 const rainyWeatherCodes = [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99];
                 const isRaining = rain > 0 || precipitation > 0 || rainyWeatherCodes.includes(weatherCode);
                 const isCold = temp < 14;
@@ -668,7 +787,6 @@
                 });
             });
 
-            // Mute button
             elements.muteBtn.addEventListener('click', toggleMute);
         }
 
@@ -687,11 +805,9 @@
             if (mode === 'basic') {
                 document.body.setAttribute('data-theme', 'basic');
 
-                // Update logos
                 elements.heroLogo.src = 'Peggy-basic.png';
                 elements.resultLogo.src = 'Peggy-basic.png';
 
-                // Update text
                 elements.mainTitle.innerHTML = "Peggy's Super Slay Questions 💅";
                 elements.mainSubtitle.textContent = "Serving looks and trivia, bestie!";
                 elements.startBtn.textContent = "Let's Go Bestie! 💅";
@@ -700,10 +816,8 @@
                 elements.shareBtn.textContent = "Share Your Slay 💖";
                 document.title = "Peggy's Super Slay Questions 💅";
 
-                // Start emoji rain
                 startEmojiRain();
 
-                // Play sound
                 if (playSound && !isMuted) {
                     elements.sound.currentTime = 0;
                     elements.sound.play().catch(e => console.log('Audio play failed:', e));
@@ -712,11 +826,9 @@
             } else {
                 document.body.removeAttribute('data-theme');
 
-                // Update logos
                 elements.heroLogo.src = 'peggy.png';
                 elements.resultLogo.src = 'peggy.png';
 
-                // Update text
                 elements.mainTitle.textContent = "Peggy's Very Serious Questions";
                 elements.mainSubtitle.textContent = "A daily inquiry into the matters of utmost canine importance.";
                 elements.startBtn.textContent = "Begin Today's Quiz";
@@ -725,10 +837,8 @@
                 elements.shareBtn.textContent = "Share Score";
                 document.title = "Peggy's Very Serious Questions";
 
-                // Stop emoji rain
                 stopEmojiRain();
 
-                // Stop sound
                 elements.sound.pause();
                 elements.sound.currentTime = 0;
             }
@@ -743,12 +853,10 @@
             container.className = 'emoji-rain-container';
             document.body.appendChild(container);
 
-            // Initial batch
             for (let i = 0; i < 15; i++) {
                 createRainEmoji(container, emojis, i * 400);
             }
 
-            // Continuous spawn
             emojiRainInterval = setInterval(() => {
                 createRainEmoji(container, emojis, 0);
             }, 800);
@@ -856,7 +964,8 @@
             currentQuestionIndex++;
 
             if (currentQuestionIndex < todaysQuestions.length) {
-                document.querySelectorAll('.option-btn')[selectedIndex].style.background = 'var(--secondary-bg)';
+                document.querySelectorAll('.option-btn')[selectedIndex].style.background = 'var(--neutral-surface)';
+                document.querySelectorAll('.option-btn')[selectedIndex].style.borderColor = 'var(--primary)';
                 setTimeout(loadQuestion, 250);
             } else {
                 finishQuiz();
