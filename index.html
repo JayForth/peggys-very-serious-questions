@@ -424,14 +424,18 @@
             background: #22c55e !important;
             border-color: #16a34a !important;
             color: white !important;
-            animation: lightUpCorrect 0.3s ease-out;
+            animation: lightUpCorrect 0.3s ease-out forwards;
         }
 
         .option-btn.incorrect {
             background: #ef4444 !important;
             border-color: #dc2626 !important;
             color: white !important;
-            animation: lightUpIncorrect 0.3s ease-out;
+            animation: lightUpIncorrect 0.3s ease-out forwards;
+        }
+
+        .option-btn:focus {
+            outline: none;
         }
 
         @keyframes lightUpCorrect {
@@ -1180,6 +1184,11 @@
         }
 
         function loadQuestion() {
+            // Clear any focus from previous buttons
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+
             const q = todaysQuestions[currentQuestionIndex];
             elements.qText.textContent = q.question;
             elements.curNum.textContent = currentQuestionIndex + 1;
