@@ -505,12 +505,19 @@
             overflow: hidden;
         }
 
+        .emoji-rain-container.foreground {
+            z-index: 100;
+        }
+
         .emoji-rain {
             position: absolute;
             top: -50px;
             animation: emojiRainFall linear forwards;
-            filter: blur(0.5px);
             will-change: transform, opacity;
+        }
+
+        .emoji-rain-container.foreground .emoji-rain {
+            filter: blur(0.5px);
         }
 
         @keyframes emojiRainFall {
@@ -878,20 +885,33 @@
             if (document.querySelector('.emoji-rain-container')) return;
 
             const emojis = ['💦', '🫦', '💗', '🔥', '❤️‍🔥', '🙈', '😘', '✌️', '💰', '💸', '💅', '👑', '✨'];
-            const container = document.createElement('div');
-            container.className = 'emoji-rain-container';
-            document.body.appendChild(container);
 
-            for (let i = 0; i < 15; i++) {
-                createRainEmoji(container, emojis, i * 400);
+            // Background layer (behind card)
+            const bgContainer = document.createElement('div');
+            bgContainer.className = 'emoji-rain-container background';
+            document.body.appendChild(bgContainer);
+
+            // Foreground layer (in front of card)
+            const fgContainer = document.createElement('div');
+            fgContainer.className = 'emoji-rain-container foreground';
+            document.body.appendChild(fgContainer);
+
+            for (let i = 0; i < 10; i++) {
+                createRainEmoji(bgContainer, emojis, i * 500, false);
+                createRainEmoji(fgContainer, emojis, i * 600 + 300, true);
             }
 
             emojiRainInterval = setInterval(() => {
-                createRainEmoji(container, emojis, 0);
-            }, 800);
+                // 60% go to foreground, 40% to background
+                if (Math.random() < 0.6) {
+                    createRainEmoji(fgContainer, emojis, 0, true);
+                } else {
+                    createRainEmoji(bgContainer, emojis, 0, false);
+                }
+            }, 600);
         }
 
-        function createRainEmoji(container, emojis, delay) {
+        function createRainEmoji(container, emojis, delay, isForeground) {
             setTimeout(() => {
                 if (!document.querySelector('.emoji-rain-container')) return;
 
@@ -901,12 +921,23 @@
 
                 const sizeVariant = Math.random();
                 let fontSize, opacity;
-                if (sizeVariant < 0.33) {
-                    fontSize = '1rem'; opacity = 0.3;
-                } else if (sizeVariant < 0.66) {
-                    fontSize = '1.5rem'; opacity = 0.5;
+
+                if (isForeground) {
+                    // Foreground: larger but more transparent
+                    if (sizeVariant < 0.5) {
+                        fontSize = '1.5rem'; opacity = 0.35;
+                    } else {
+                        fontSize = '2rem'; opacity = 0.25;
+                    }
                 } else {
-                    fontSize = '1.8rem'; opacity = 0.7;
+                    // Background: varied sizes, slightly more opaque
+                    if (sizeVariant < 0.33) {
+                        fontSize = '1rem'; opacity = 0.5;
+                    } else if (sizeVariant < 0.66) {
+                        fontSize = '1.4rem'; opacity = 0.6;
+                    } else {
+                        fontSize = '1.8rem'; opacity = 0.7;
+                    }
                 }
 
                 emoji.style.fontSize = fontSize;
@@ -925,8 +956,7 @@
                 clearInterval(emojiRainInterval);
                 emojiRainInterval = null;
             }
-            const container = document.querySelector('.emoji-rain-container');
-            if (container) container.remove();
+            document.querySelectorAll('.emoji-rain-container').forEach(c => c.remove());
         }
 
         // Mute functionality
