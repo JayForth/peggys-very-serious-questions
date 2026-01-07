@@ -424,12 +424,26 @@
             background: #22c55e !important;
             border-color: #16a34a !important;
             color: white !important;
+            animation: lightUpCorrect 0.3s ease-out;
         }
 
         .option-btn.incorrect {
             background: #ef4444 !important;
             border-color: #dc2626 !important;
             color: white !important;
+            animation: lightUpIncorrect 0.3s ease-out;
+        }
+
+        @keyframes lightUpCorrect {
+            0% { background: var(--neutral-surface); transform: scale(1); }
+            50% { background: #4ade80; transform: scale(1.02); box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+            100% { background: #22c55e; transform: scale(1); }
+        }
+
+        @keyframes lightUpIncorrect {
+            0% { background: var(--neutral-surface); transform: scale(1); }
+            50% { background: #f87171; transform: scale(1.02); box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+            100% { background: #ef4444; transform: scale(1); }
         }
 
         .option-btn.disabled {
@@ -1203,20 +1217,31 @@
             if (isCorrect) {
                 score++;
                 buttons[selectedIndex].classList.add('correct');
+                // Move to next question after delay
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < todaysQuestions.length) {
+                        loadQuestion();
+                    } else {
+                        finishQuiz();
+                    }
+                }, 800);
             } else {
+                // Show wrong first, then reveal correct after "doh!" moment
                 buttons[selectedIndex].classList.add('incorrect');
-                buttons[question.answer].classList.add('correct');
+                setTimeout(() => {
+                    buttons[question.answer].classList.add('correct');
+                    // Move to next question after seeing correct answer
+                    setTimeout(() => {
+                        currentQuestionIndex++;
+                        if (currentQuestionIndex < todaysQuestions.length) {
+                            loadQuestion();
+                        } else {
+                            finishQuiz();
+                        }
+                    }, 1200);
+                }, 600);
             }
-
-            // Move to next question after delay
-            setTimeout(() => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < todaysQuestions.length) {
-                    loadQuestion();
-                } else {
-                    finishQuiz();
-                }
-            }, isCorrect ? 800 : 1500);
         }
 
         function finishQuiz() {
@@ -1271,7 +1296,7 @@
                         <a href="https://en.wikipedia.org/wiki/Special:Search?search=${wikiQuery}"
                            target="_blank"
                            rel="noopener noreferrer"
-                           class="wiki-link">📚 Learn more on Wikipedia →</a>
+                           class="wiki-link">📚 Learn more →</a>
                     `;
                 }
 
