@@ -813,9 +813,9 @@
                 const needsCoat = isCold || isRaining || isWindy;
 
                 if (needsCoat) {
-                    elements.weatherBush.textContent = "🌳 The weather bush says: Beck should wear a coat today.";
+                    elements.weatherBush.textContent = `🌳 The weather bush says: Beck should wear a coat today (${Math.round(temp)}°C).`;
                 } else {
-                    elements.weatherBush.textContent = "🌳 The weather bush says: No coat needed today! Woohoo!";
+                    elements.weatherBush.textContent = `🌳 The weather bush says: No coat needed today! Woohoo! (${Math.round(temp)}°C)`;
                 }
 
             } catch (error) {
