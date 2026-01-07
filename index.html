@@ -101,6 +101,7 @@
             background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
+            z-index: 101;
         }
 
         /* Hero Image */
@@ -403,6 +404,10 @@
         .option-btn:hover {
             border-color: var(--primary);
             background: var(--neutral-bg);
+        }
+
+        [data-theme="basic"] .option-btn {
+            background: rgba(255, 255, 255, 0.95);
         }
 
         [data-theme="basic"] .option-btn:hover {
